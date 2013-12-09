@@ -325,7 +325,7 @@ public class ClienteDAO {
     private boolean abrirConexion() {
         boolean done = false;
         System.out.println("[ClienteDAO] Se abrira conexion a la base de datos");
-        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq7");
+        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq");
         conexion = contpaqConnection.getConnection();
         if (conexion != null) {
             done = true;
