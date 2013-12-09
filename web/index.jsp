@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page  import="java.util.Vector, com.tux.ws.ContpaqWS" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,6 +13,14 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <%
+            try {
+                ContpaqWS form = new ContpaqWS();
+                String result = form.hello("prueba");
+                out.println(result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        %>
     </body>
 </html>
