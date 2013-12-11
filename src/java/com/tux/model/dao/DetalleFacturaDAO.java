@@ -66,35 +66,35 @@ public class DetalleFacturaDAO {
                 sentencia.setDouble(36, detalleFactura.getCporcent10());
                 sentencia.setDouble(37, detalleFactura.getCtotal());
                 sentencia.setDouble(38, detalleFactura.getCporcent11());
-                sentencia.setString(39, detalleFactura.getCreferen01());
-                sentencia.setString(40, detalleFactura.getCobserva01());
-                sentencia.setBigDecimal(41, detalleFactura.getCafectae01());
-                sentencia.setBigDecimal(42, detalleFactura.getCafectad01());
-                sentencia.setBigDecimal(43, detalleFactura.getCafectad02());
-                sentencia.setDate(44, detalleFactura.getCfecha());
-                sentencia.setBigDecimal(45, detalleFactura.getCmovtooc01());
-                sentencia.setBigDecimal(46, detalleFactura.getCidmovto01());
-                sentencia.setBigDecimal(47, detalleFactura.getCidmovto02());
-                sentencia.setDouble(48, detalleFactura.getCunidade03());
-                sentencia.setDouble(49, detalleFactura.getCunidade04());
-                sentencia.setDouble(50, detalleFactura.getCunidade05());
-                sentencia.setDouble(51, detalleFactura.getCunidade06());
-                sentencia.setBigDecimal(52, detalleFactura.getCtipotra01());
-                sentencia.setBigDecimal(53, detalleFactura.getCidvalor01());
-                sentencia.setString(54, detalleFactura.getCtextoex01());
-                sentencia.setString(55, detalleFactura.getCtextoex02());
-                sentencia.setString(56, detalleFactura.getCtextoex03());
-                sentencia.setDate(57, detalleFactura.getCfechaex01());
-                sentencia.setDouble(58, detalleFactura.getCimporte01());
-                sentencia.setDouble(59, detalleFactura.getCimporte02());
-                sentencia.setDouble(60, detalleFactura.getCimporte03());
-                sentencia.setDouble(61, detalleFactura.getCimporte04());
-                sentencia.setString(62, detalleFactura.getCtimestamp());
-                sentencia.setDouble(63, detalleFactura.getCgtomovto());
-                sentencia.setString(64, detalleFactura.getCscmovto());
-                sentencia.setDouble(65, detalleFactura.getCcomventa());
-                sentencia.setBigDecimal(66, detalleFactura.getCidmovdest());
-                sentencia.setBigDecimal(67, detalleFactura.getCnumconsol());
+                //sentencia.setString(39, detalleFactura.getCreferen01());
+                //sentencia.setString(40, detalleFactura.getCobserva01());
+                sentencia.setBigDecimal(39, detalleFactura.getCafectae01());
+                sentencia.setBigDecimal(40, detalleFactura.getCafectad01());
+                sentencia.setBigDecimal(41, detalleFactura.getCafectad02());
+                sentencia.setDate(42, detalleFactura.getCfecha());
+                sentencia.setBigDecimal(43, detalleFactura.getCmovtooc01());
+                //sentencia.setBigDecimal(46, detalleFactura.getCidmovto01());
+                //sentencia.setBigDecimal(47, detalleFactura.getCidmovto02());
+                sentencia.setDouble(44, detalleFactura.getCunidade03());
+                sentencia.setDouble(45, detalleFactura.getCunidade04());
+                sentencia.setDouble(46, detalleFactura.getCunidade05());
+                sentencia.setDouble(47, detalleFactura.getCunidade06());
+                sentencia.setBigDecimal(48, detalleFactura.getCtipotra01());
+                sentencia.setBigDecimal(49, detalleFactura.getCidvalor01());
+                //sentencia.setString(54, detalleFactura.getCtextoex01());
+                //sentencia.setString(55, detalleFactura.getCtextoex02());
+                //sentencia.setString(56, detalleFactura.getCtextoex03());
+                //sentencia.setDate(57, detalleFactura.getCfechaex01());
+                sentencia.setDouble(50, detalleFactura.getCimporte01());
+                sentencia.setDouble(51, detalleFactura.getCimporte02());
+                sentencia.setDouble(52, detalleFactura.getCimporte03());
+                sentencia.setDouble(53, detalleFactura.getCimporte04());
+                ///sentencia.setString(62, detalleFactura.getCtimestamp());
+                sentencia.setDouble(54, detalleFactura.getCgtomovto());
+                //sentencia.setString(55, detalleFactura.getCscmovto());
+                sentencia.setDouble(55, detalleFactura.getCcomventa());
+                //sentencia.setBigDecimal(66, detalleFactura.getCidmovdest());
+                //sentencia.setBigDecimal(67, detalleFactura.getCnumconsol());
                 sentencia.execute();
                 conexion.commit();
                 done = true;
@@ -160,34 +160,49 @@ public class DetalleFacturaDAO {
                 det = new ContpaqDetalleFactura();
                 Field[] attributes = det.getClass().getDeclaredFields();
                 System.out.println("Detectados " + attributes.length + " atributos");
-                columnas = getColumnNames(attributes);
-                //for (Field field : attributes) {
-                for (int i = 0; i < columnas.length; i++) {
-                    clase = columnas[i][1];
-                    System.out.println("ATTRIBUTE NAME: " + columnas[i][0]);
+                //columnas = getColumnNames(attributes);
+                for (Field field : attributes) {
+                    //for (int i = 0; i < columnas.length; i++) {
+                    //clase = columnas[i][1];
+                    field.setAccessible(true);
+                    clase = field.getType().getCanonicalName();
+                    System.out.println("DetalleFacturaDAO.construirCliente: Obteniendo y seteando propiedad --> " + field.getName());
                     if (clase.equals("java.math.BigDecimal")) {
-                        System.out.println("-------------------BD---------------------");
-                        BigDecimal ejemplo = rs.getBigDecimal(columnas[i][0]);
-                        System.out.println("------- PROP: " + columnas[i][0] + " - CN: " + detallesFactura.get(columnas[i][0]) + " - VAL: " + ejemplo);//+ rs.getBigDecimal(factura.get(columnas[i][0])) + " ----------");
-                        PropertyUtils.setSimpleProperty(det, columnas[i][0], ejemplo);
-                        System.out.println("ATTRIBUTE NAME: " + columnas[i][0]);
+                        field.set(detallesFactura, rs.getBigDecimal(field.getName()));
                     } else if (clase.equals("java.lang.String")) {
-                        System.out.println("-------------------Str---------------------");
-                        PropertyUtils.setSimpleProperty(det, columnas[i][0], rs.getString(detallesFactura.get(columnas[i][0])));
+                        field.set(detallesFactura, rs.getString(detallesFactura.get(field.getName())));
                     } else if (clase.equals("java.lang.Double")) {
-                        System.out.println("-------------------Db---------------------");
-                        PropertyUtils.setSimpleProperty(det, columnas[i][0], rs.getDouble(detallesFactura.get(columnas[i][0])));
+                        field.set(detallesFactura, rs.getDouble(detallesFactura.get(field.getName())));
                     } else if (clase.equals("java.sql.Date")) {
-                        System.out.println("-------------------Da---------------------");
-                        PropertyUtils.setSimpleProperty(det, columnas[i][0], rs.getDate(detallesFactura.get(columnas[i][0])));
+                        field.set(detallesFactura, rs.getDate(detallesFactura.get(field.getName())));
                     }
-                    System.out.println("ATTRIBUTE VALUE: " + PropertyUtils.getSimpleProperty(det, columnas[i][0]));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return det;
+    }
+
+    public BigDecimal getMaxId() {
+        BigDecimal numeroFactura = null;
+        try {
+            if (abrirConexion()) {
+                sentencia = conexion.prepareStatement(construirSQL(5, null, null));
+                resultado = sentencia.executeQuery();
+                if (resultado.next()) {
+                    numeroFactura = resultado.getBigDecimal(1);
+                }
+            } else {
+                System.out.println("[DetalleFacturaDAO] No se pudo obtener el siguiente ID");
+            }
+        } catch (Exception e) {
+            System.out.println("[DetalleFacturaDAO] Ocurrio un error al obtener el siguiente ID");
+            e.printStackTrace();
+        } finally {
+            cerrarConexion();
+            return numeroFactura;
+        }
     }
 
     private String[][] getColumnNames(Field[] campos) {
@@ -206,7 +221,7 @@ public class DetalleFacturaDAO {
             metadatos.getClass().getSimpleName();
             for (int i = 1; i <= metadatos.getColumnCount(); i++) {
                 //System.out.println("private " + metadatos.getColumnClassName(i) + " " + metadatos.getColumnLabel(i) + ";");
-                System.out.println("detalle.set" + metadatos.getColumnLabel(i)+"();");
+                System.out.println("detalle.set" + metadatos.getColumnLabel(i) + "();");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -230,10 +245,10 @@ public class DetalleFacturaDAO {
                 sql = "INSERT INTO " + detallesFactura.get("archivoDbf") + "(CIDMOVIM01,CIDDOCUM01,CNUMEROM01,CIDDOCUM02,CIDPRODU01,CIDALMACEN,CUNIDADES,CUNIDADE01,"
                         + "CUNIDADE02,CIDUNIDAD,CIDUNIDA01,CPRECIO,CPRECIOC01,CCOSTOCA01,CCOSTOES01,CNETO,CIMPUESTO1,CPORCENT01,CIMPUESTO2,CPORCENT02,CIMPUESTO3,CPORCENT03"
                         + ",CRETENCI01,CPORCENT04,CRETENCI02,CPORCENT05,CDESCUEN01,CPORCENT06,CDESCUEN02,CPORCENT07,CDESCUEN03,CPORCENT08,CDESCUEN04,CPORCENT09,CDESCUEN05,"
-                        + "CPORCENT10,CTOTAL,CPORCENT11,CREFEREN01,COBSERVA01,CAFECTAE01,CAFECTAD01,CAFECTAD02,CFECHA,CMOVTOOC01,CIDMOVTO01,CIDMOVTO02,CUNIDADE03,CUNIDADE04,"
-                        + "CUNIDADE05,CUNIDADE06,CTIPOTRA01,CIDVALOR01,CTEXTOEX01,CTEXTOEX02,CTEXTOEX03,CFECHAEX01,CIMPORTE01,CIMPORTE02,CIMPORTE03,CIMPORTE04,CTIMESTAMP,CGTOMOVTO,"
-                        + "CSCMOVTO,CCOMVENTA,CIDMOVDEST,CNUMCONSOL)"
-                        + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        + "CPORCENT10,CTOTAL,CPORCENT11,CAFECTAE01,CAFECTAD01,CAFECTAD02,CFECHA,CMOVTOOC01,CUNIDADE03,CUNIDADE04,"
+                        + "CUNIDADE05,CUNIDADE06,CTIPOTRA01,CIDVALOR01,CIMPORTE01,CIMPORTE02,CIMPORTE03,CIMPORTE04,CGTOMOVTO,"
+                        + "CCOMVENTA)"
+                        + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 break;
             case 2:
                 sql = "UPDATE " + detallesFactura.get("archivoDbf") + " SET " + campo + " = " + valor;
@@ -243,6 +258,9 @@ public class DetalleFacturaDAO {
                 break;
             case 4:
                 sql = "SELECT * FROM " + detallesFactura.get("archivoDbf");
+                break;
+            case 5:
+                sql = "SELECT MAX(CIDMOVIM01) FROM " + detallesFactura.get("archivoDbf");
                 break;
             default:
                 System.out.println("");

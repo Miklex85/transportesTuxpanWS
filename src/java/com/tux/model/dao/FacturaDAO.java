@@ -33,81 +33,81 @@ public class FacturaDAO {
                 sentencia.setBigDecimal(1, factura.getCiddocum01());
                 sentencia.setBigDecimal(2, factura.getCiddocum02());
                 sentencia.setBigDecimal(3, factura.getCidconce01());
-                sentencia.setString(4, factura.getCseriedo01());
-                sentencia.setDouble(5, factura.getCfolio());
-                sentencia.setDate(6, factura.getCfecha());
-                sentencia.setBigDecimal(7, factura.getCidclien01());
-                sentencia.setString(8, factura.getCrazonso01());
-                sentencia.setString(9, factura.getCrfc());
-                sentencia.setBigDecimal(10, factura.getCidagente());
-                sentencia.setDate(11, factura.getCfechave01());
-                sentencia.setDate(12, factura.getCfechapr01());
-                sentencia.setDate(13, factura.getCfechaen01());
-                sentencia.setDate(14, factura.getCfechaul01());
-                sentencia.setBigDecimal(15, factura.getCidmoneda());
-                sentencia.setDouble(16, factura.getCtipocam01());
-                sentencia.setString(17, factura.getCreferen01());
-                sentencia.setString(18, factura.getCobserva01());
-                sentencia.setBigDecimal(19, factura.getCnatural01());
-                sentencia.setBigDecimal(20, factura.getCiddocum03());
-                sentencia.setBigDecimal(21, factura.getCplantilla());
-                sentencia.setBigDecimal(22, factura.getCusaclie01());
-                sentencia.setBigDecimal(23, factura.getCusaprov01());
-                sentencia.setBigDecimal(24, factura.getCafectado());
-                sentencia.setBigDecimal(25, factura.getCimpreso());
-                sentencia.setBigDecimal(26, factura.getCcancelado());
-                sentencia.setBigDecimal(27, factura.getCdevuelto());
-                sentencia.setBigDecimal(28, factura.getCidprepo01());
-                sentencia.setBigDecimal(29, factura.getCidprepo02());
-                sentencia.setBigDecimal(30, factura.getCestadoc01());
-                sentencia.setDouble(31, factura.getCneto());
-                sentencia.setDouble(32, factura.getCimpuesto1());
-                sentencia.setDouble(33, factura.getCimpuesto2());
-                sentencia.setDouble(34, factura.getCimpuesto3());
-                sentencia.setDouble(35, factura.getCretenci01());
-                sentencia.setDouble(36, factura.getCretenci02());
-                sentencia.setDouble(37, factura.getCdescuen01());
-                sentencia.setDouble(38, factura.getCdescuen02());
-                sentencia.setDouble(39, factura.getCdescuen03());
-                sentencia.setDouble(40, factura.getCgasto1());
-                sentencia.setDouble(41, factura.getCgasto2());
-                sentencia.setDouble(42, factura.getCgasto3());
-                sentencia.setDouble(43, factura.getCtotal());
-                sentencia.setDouble(44, factura.getCpendiente());
-                sentencia.setDouble(45, factura.getCtotalun01());
-                sentencia.setDouble(46, factura.getCdescuen04());
-                sentencia.setDouble(47, factura.getCporcent01());
-                sentencia.setDouble(48, factura.getCporcent02());
-                sentencia.setDouble(49, factura.getCporcent03());
-                sentencia.setDouble(50, factura.getCporcent04());
-                sentencia.setDouble(51, factura.getCporcent05());
-                sentencia.setDouble(52, factura.getCporcent06());
-                sentencia.setString(53, factura.getCtextoex01());
-                sentencia.setString(54, factura.getCtextoex02());
-                sentencia.setString(55, factura.getCtextoex03());
-                sentencia.setDate(56, factura.getCfechaex01());
-                sentencia.setDouble(57, factura.getCimporte01());
-                sentencia.setDouble(58, factura.getCimporte02());
-                sentencia.setDouble(59, factura.getCimporte03());
-                sentencia.setDouble(60, factura.getCimporte04());
-                sentencia.setString(61, factura.getCdestina01());
-                sentencia.setString(62, factura.getCnumerog01());
-                sentencia.setString(63, factura.getCmensaje01());
-                sentencia.setString(64, factura.getCcuentam01());
-                sentencia.setDouble(65, factura.getCnumeroc01());
-                sentencia.setDouble(66, factura.getCpeso());
-                sentencia.setBigDecimal(67, factura.getCbanobse01());
-                sentencia.setBigDecimal(68, factura.getCbandato01());
-                sentencia.setBigDecimal(69, factura.getCbancond01());
-                sentencia.setBigDecimal(70, factura.getCbangastos());
-                sentencia.setDouble(71, factura.getCunidade01());
-                sentencia.setString(72, factura.getCtimestamp());
-                sentencia.setDouble(73, factura.getCimpcheq01());
-                sentencia.setBigDecimal(74, factura.getCsistorig());
-                sentencia.setBigDecimal(75, factura.getCidmonedca());
-                sentencia.setDouble(76, factura.getCtipocamca());
-                sentencia.setBigDecimal(77, factura.getCescfd());
-                sentencia.setBigDecimal(78, factura.getCtienecfd());
+                //sentencia.setString(4, factura.getCseriedo01());
+                sentencia.setDouble(4, factura.getCfolio());
+                sentencia.setDate(5, factura.getCfecha());
+                sentencia.setBigDecimal(6, factura.getCidclien01());
+                sentencia.setString(7, factura.getCrazonso01());
+                sentencia.setString(8, factura.getCrfc());
+                sentencia.setBigDecimal(9, factura.getCidagente());
+                sentencia.setDate(10, factura.getCfechave01());
+                sentencia.setDate(11, factura.getCfechapr01());
+                sentencia.setDate(12, factura.getCfechaen01());
+                sentencia.setDate(13, factura.getCfechaul01());
+                sentencia.setBigDecimal(14, factura.getCidmoneda());
+                sentencia.setDouble(15, factura.getCtipocam01());
+                sentencia.setString(16, factura.getCreferen01());
+                sentencia.setString(17, factura.getCobserva01());
+                sentencia.setBigDecimal(18, factura.getCnatural01());
+                //sentencia.setBigDecimal(20, factura.getCiddocum03());
+                //sentencia.setBigDecimal(21, factura.getCplantilla());
+                sentencia.setBigDecimal(19, factura.getCusaclie01());
+                sentencia.setBigDecimal(20, factura.getCusaprov01());
+                sentencia.setBigDecimal(21, factura.getCafectado());
+                sentencia.setBigDecimal(22, factura.getCimpreso());
+                sentencia.setBigDecimal(23, factura.getCcancelado());
+                sentencia.setBigDecimal(24, factura.getCdevuelto());
+                //sentencia.setBigDecimal(28, factura.getCidprepo01());
+                //sentencia.setBigDecimal(29, factura.getCidprepo02());
+                sentencia.setBigDecimal(25, factura.getCestadoc01());
+                sentencia.setDouble(26, factura.getCneto());
+                sentencia.setDouble(27, factura.getCimpuesto1());
+                sentencia.setDouble(28, factura.getCimpuesto2());
+                sentencia.setDouble(29, factura.getCimpuesto3());
+                sentencia.setDouble(30, factura.getCretenci01());
+                sentencia.setDouble(31, factura.getCretenci02());
+                sentencia.setDouble(32, factura.getCdescuen01());
+                sentencia.setDouble(33, factura.getCdescuen02());
+                sentencia.setDouble(34, factura.getCdescuen03());
+                sentencia.setDouble(35, factura.getCgasto1());
+                sentencia.setDouble(36, factura.getCgasto2());
+                sentencia.setDouble(37, factura.getCgasto3());
+                sentencia.setDouble(38, factura.getCtotal());
+                sentencia.setDouble(39, factura.getCpendiente());
+                sentencia.setDouble(40, factura.getCtotalun01());
+                sentencia.setDouble(41, factura.getCdescuen04());
+                sentencia.setDouble(42, factura.getCporcent01());
+                sentencia.setDouble(43, factura.getCporcent02());
+                sentencia.setDouble(44, factura.getCporcent03());
+                sentencia.setDouble(45, factura.getCporcent04());
+                sentencia.setDouble(46, factura.getCporcent05());
+                sentencia.setDouble(47, factura.getCporcent06());
+                //sentencia.setString(53, factura.getCtextoex01());
+                //sentencia.setString(54, factura.getCtextoex02());
+                //sentencia.setString(55, factura.getCtextoex03());
+                //sentencia.setDate(56, factura.getCfechaex01());
+                sentencia.setDouble(48, factura.getCimporte01());
+                sentencia.setDouble(49, factura.getCimporte02());
+                sentencia.setDouble(50, factura.getCimporte03());
+                sentencia.setDouble(51, factura.getCimporte04());
+                sentencia.setString(52, factura.getCdestina01());
+                sentencia.setString(53, factura.getCnumerog01());
+                sentencia.setString(54, factura.getCmensaje01());
+                sentencia.setString(55, factura.getCcuentam01());
+                sentencia.setDouble(56, factura.getCnumeroc01());
+                sentencia.setDouble(57, factura.getCpeso());
+                sentencia.setBigDecimal(58, factura.getCbanobse01());
+                sentencia.setBigDecimal(59, factura.getCbandato01());
+                sentencia.setBigDecimal(60, factura.getCbancond01());
+                sentencia.setBigDecimal(61, factura.getCbangastos());
+                sentencia.setDouble(62, factura.getCunidade01());
+                //sentencia.setString(72, factura.getCtimestamp());
+                sentencia.setDouble(63, factura.getCimpcheq01());
+                sentencia.setBigDecimal(64, factura.getCsistorig());
+                sentencia.setBigDecimal(65, factura.getCidmonedca());
+                sentencia.setDouble(66, factura.getCtipocamca());
+                sentencia.setBigDecimal(67, factura.getCescfd());
+                sentencia.setBigDecimal(68, factura.getCtienecfd());
                 sentencia.execute();
                 conexion.commit();
                 done = true;
@@ -247,35 +247,29 @@ public class FacturaDAO {
     private ContpaqFactura construirFactura(ResultSet rs) {
         ContpaqFactura fact = null;
         String clase;
-        String[][] columnas;
+        //String[][] columnas;
         try {
             //getColumnNames(rs);
             if (rs.next()) {
                 fact = new ContpaqFactura();
                 Field[] attributes = fact.getClass().getDeclaredFields();
                 System.out.println("Detectados " + attributes.length + " atributos");
-                columnas = getColumnNames(attributes);
-                //for (Field field : attributes) {
-                for (int i = 0; i < columnas.length; i++) {
-                    clase = columnas[i][1];
-                    System.out.println("ATTRIBUTE NAME: " + columnas[i][0]);
+                //columnas = getColumnNames(attributes);
+                for (Field field : attributes) {
+                    //for (int i = 0; i < columnas.length; i++) {
+                    //clase = columnas[i][1];
+                    field.setAccessible(true);
+                    clase = field.getType().getCanonicalName();
+                    System.out.println("ClienteDAO.construirCliente: Obteniendo y seteando propiedad --> " + field.getName());
                     if (clase.equals("java.math.BigDecimal")) {
-                        System.out.println("-------------------BD---------------------");
-                        BigDecimal ejemplo = rs.getBigDecimal(columnas[i][0]);
-                        System.out.println("------- PROP: " + columnas[i][0] + " - CN: " + factura.get(columnas[i][0]) + " - VAL: " + ejemplo);//+ rs.getBigDecimal(factura.get(columnas[i][0])) + " ----------");
-                        PropertyUtils.setSimpleProperty(fact, columnas[i][0], ejemplo);
-                        System.out.println("ATTRIBUTE NAME: " + columnas[i][0]);
+                        field.set(factura, rs.getBigDecimal(field.getName()));
                     } else if (clase.equals("java.lang.String")) {
-                        System.out.println("-------------------Str---------------------");
-                        PropertyUtils.setSimpleProperty(fact, columnas[i][0], rs.getString(factura.get(columnas[i][0])));
+                        field.set(factura, rs.getString(factura.get(field.getName())));
                     } else if (clase.equals("java.lang.Double")) {
-                        System.out.println("-------------------Db---------------------");
-                        PropertyUtils.setSimpleProperty(fact, columnas[i][0], rs.getDouble(factura.get(columnas[i][0])));
+                        field.set(factura, rs.getDouble(factura.get(field.getName())));
                     } else if (clase.equals("java.sql.Date")) {
-                        System.out.println("-------------------Da---------------------");
-                        PropertyUtils.setSimpleProperty(fact, columnas[i][0], rs.getDate(factura.get(columnas[i][0])));
+                        field.set(factura, rs.getDate(factura.get(field.getName())));
                     }
-                    System.out.println("ATTRIBUTE VALUE: " + PropertyUtils.getSimpleProperty(fact, columnas[i][0]));
                 }
             }
         } catch (Exception e) {
@@ -320,15 +314,15 @@ public class FacturaDAO {
         factura = tableMapper.mapDbfTable("factura");
         switch (opcion) {
             case 1:
-                sql = "INSERT INTO " + factura.get("archivoDbf") + "(CIDDOCUM01,CIDDOCUM02,CIDCONCE01,CSERIEDO01,CFOLIO,CFECHA,"
+                sql = "INSERT INTO " + factura.get("archivoDbf") + "(CIDDOCUM01,CIDDOCUM02,CIDCONCE01,CFOLIO,CFECHA,"
                         + "CIDCLIEN01,CRAZONSO01,CRFC,CIDAGENTE,CFECHAVE01,CFECHAPR01,CFECHAEN01,CFECHAUL01,CIDMONEDA,CTIPOCAM01,"
-                        + "CREFEREN01,COBSERVA01,CNATURAL01,CIDDOCUM03,CPLANTILLA,CUSACLIE01,CUSAPROV01,CAFECTADO,CIMPRESO,CCANCELADO,"
-                        + "CDEVUELTO,CIDPREPO01,CIDPREPO02,CESTADOC01,CNETO,CIMPUESTO1,CIMPUESTO2,CIMPUESTO3,CRETENCI01,CRETENCI02,CDESCUEN01,"
+                        + "CREFEREN01,COBSERVA01,CNATURAL01,CUSACLIE01,CUSAPROV01,CAFECTADO,CIMPRESO,CCANCELADO,"
+                        + "CDEVUELTO,CESTADOC01,CNETO,CIMPUESTO1,CIMPUESTO2,CIMPUESTO3,CRETENCI01,CRETENCI02,CDESCUEN01,"
                         + "CDESCUEN02,CDESCUEN03,CGASTO1,CGASTO2,CGASTO3,CTOTAL,CPENDIENTE,CTOTALUN01,CDESCUEN04,CPORCENT01,CPORCENT02,CPORCENT03,"
-                        + "CPORCENT04,CPORCENT05,CPORCENT06,CTEXTOEX01,CTEXTOEX02,CTEXTOEX03,CFECHAEX01,CIMPORTE01,CIMPORTE02,CIMPORTE03,CIMPORTE04,"
+                        + "CPORCENT04,CPORCENT05,CPORCENT06,CIMPORTE01,CIMPORTE02,CIMPORTE03,CIMPORTE04,"
                         + "CDESTINA01,CNUMEROG01,CMENSAJE01,CCUENTAM01,CNUMEROC01,CPESO,CBANOBSE01,CBANDATO01,CBANCOND01,CBANGASTOS,CUNIDADE01,"
-                        + "CTIMESTAMP,CIMPCHEQ01,CSISTORIG,CIDMONEDCA,CTIPOCAMCA,CESCFD,CTIENECFD)"
-                        + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        + "CIMPCHEQ01,CSISTORIG,CIDMONEDCA,CTIPOCAMCA,CESCFD,CTIENECFD)"
+                        + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 break;
             case 2:
                 sql = "UPDATE " + factura.get("archivoDbf") + " SET " + campo + " = " + valor;

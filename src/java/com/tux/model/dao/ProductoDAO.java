@@ -13,6 +13,8 @@ import java.util.List;
 import org.apache.commons.beanutils.PropertyUtils;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -134,12 +136,22 @@ public class ProductoDAO {
                 //sentencia.setString(102, producto.getCsegcont07());
                 //sentencia.setBigDecimal(103, producto.getCnomodcomp());
                 sentencia.execute();
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS");
+                String textDate = df.format(producto.getCfechaal01());
+                sentencia = conexion.prepareStatement("INSERT INTO MGW10004(CIDPRODU01,CTIPOPRO01,CTIMESTAMP) VALUES (?,?,?)");
+                sentencia.setBigDecimal(1, producto.getCidprodu01());
+                sentencia.setBigDecimal(2, BigDecimal.valueOf(0));
+                sentencia.setString(3, textDate);
+                sentencia.execute();
                 conexion.commit();
                 done = true;
             } else {
                 System.out.println("[ProductoDAO] No se pudo guardar el producto/servicio");
             }
         } catch (Exception e) {
+            if (conexion != null) {
+                conexion.rollback();
+            }
             System.out.println("[ProductoDAO] Ocurrio un error al guardar el producto/servicio");
             e.printStackTrace();
         } finally {

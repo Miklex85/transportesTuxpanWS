@@ -57,8 +57,8 @@ public class ContpaqWS {
             //cliente.consultarCliente("CIDCLIEN01", "1");
             //direccion.consultarDireccion("CIDDIREC01", "5");
             //detalle.consultarDetalleFactura("CIDDOCUM01", "14");
-            prod.setIdProducto(4);
-            prod.setCoodigoProducto("4");
+            prod.setIdProducto(7);
+            prod.setCoodigoProducto("7");
             prod.setNombreProducto("Servicio X");
             prod.setDescripcionDetallada("Descripcion detallada");
             prod.setPrecio(45.99);
