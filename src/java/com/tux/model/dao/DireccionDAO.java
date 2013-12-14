@@ -27,6 +27,7 @@ public class DireccionDAO {
         boolean done = false;
         try {
             if (abrirConexion()) {
+                conexion.setAutoCommit(false);
                 sentencia = conexion.prepareStatement(construirSQL(1, null, null));
                 sentencia.setBigDecimal(1, direccion.getCiddirec01());
                 sentencia.setBigDecimal(2, direccion.getCidcatal01());
@@ -34,22 +35,22 @@ public class DireccionDAO {
                 sentencia.setBigDecimal(4, direccion.getCtipodir01());
                 sentencia.setString(5, direccion.getCnombrec01());
                 sentencia.setString(6, direccion.getCnumeroe01());
-                sentencia.setString(7, direccion.getCnumeroi01());
+                //sentencia.setString(7, direccion.getCnumeroi01());
                 sentencia.setString(8, direccion.getCcolonia());
                 sentencia.setString(9, direccion.getCcodigop01());
-                sentencia.setString(10, direccion.getCtelefono1());
-                sentencia.setString(11, direccion.getCtelefono2());
-                sentencia.setString(12, direccion.getCtelefono3());
-                sentencia.setString(13, direccion.getCtelefono4());
-                sentencia.setString(14, direccion.getCemail());
-                sentencia.setString(15, direccion.getCdirecci01());
+                //sentencia.setString(10, direccion.getCtelefono1());
+                //sentencia.setString(11, direccion.getCtelefono2());
+                //sentencia.setString(12, direccion.getCtelefono3());
+                //sentencia.setString(13, direccion.getCtelefono4());
+                //sentencia.setString(14, direccion.getCemail());
+                //sentencia.setString(15, direccion.getCdirecci01());
                 sentencia.setString(16, direccion.getCpais());
                 sentencia.setString(17, direccion.getCestado());
                 sentencia.setString(18, direccion.getCciudad());
-                sentencia.setString(19, direccion.getCtextoex01());
+                //sentencia.setString(19, direccion.getCtextoex01());
                 sentencia.setString(20, direccion.getCtimestamp());
                 sentencia.setString(21, direccion.getCmunicipio());
-                sentencia.setString(22, direccion.getCsucursal());
+                //sentencia.setString(22, direccion.getCsucursal());
                 sentencia.execute();
                 conexion.commit();
                 done = true;
@@ -57,6 +58,10 @@ public class DireccionDAO {
                 System.out.println("[DireccionDAO] No se pudo guardar la direccion");
             }
         } catch (Exception e) {
+            if (conexion != null) {
+                conexion.rollback();
+                System.out.println("[DireccionDAO] Haciendo rollback");
+            }
             System.out.println("[DireccionDAO] Ocurrio un error al guardar la direccion");
             e.printStackTrace();
         } finally {
@@ -102,6 +107,27 @@ public class DireccionDAO {
         } finally {
             cerrarConexion();
             return direccion;
+        }
+    }
+
+    public BigDecimal getMaxId() {
+        BigDecimal numeroFactura = null;
+        try {
+            if (abrirConexion()) {
+                sentencia = conexion.prepareStatement(construirSQL(5, null, null));
+                resultado = sentencia.executeQuery();
+                if (resultado.next()) {
+                    numeroFactura = resultado.getBigDecimal(1);
+                }
+            } else {
+                System.out.println("[FacturaDAO] No se pudo obtener el siguiente ID");
+            }
+        } catch (Exception e) {
+            System.out.println("[FacturaDAO] Ocurrio un error al obtener el siguiente ID");
+            e.printStackTrace();
+        } finally {
+            cerrarConexion();
+            return numeroFactura;
         }
     }
 
@@ -195,6 +221,9 @@ public class DireccionDAO {
             case 4:
                 sql = "SELECT * FROM " + direccion.get("archivoDbf");
                 break;
+            case 5:
+                sql = "SELECT MAX(CIDDIREC01) FROM " + direccion.get("archivoDbf");
+                break;
             default:
                 System.out.println("");
         }
@@ -205,7 +234,7 @@ public class DireccionDAO {
     private boolean abrirConexion() {
         boolean done = false;
         System.out.println("[DireccionDAO] Se abrira conexion a la base de datos");
-        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq");
+        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq7");
         conexion = contpaqConnection.getConnection();
         if (conexion != null) {
             done = true;

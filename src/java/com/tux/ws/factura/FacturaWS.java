@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tux.ws;
+package com.tux.ws.factura;
 
 import com.tux.model.FacturaBO;
 import com.tux.model.entity.Cliente;

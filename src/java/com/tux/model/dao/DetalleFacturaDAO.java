@@ -27,6 +27,7 @@ public class DetalleFacturaDAO {
         boolean done = false;
         try {
             if (abrirConexion()) {
+                conexion.setAutoCommit(false);
                 sentencia = conexion.prepareStatement(construirSQL(1, null, null));
                 sentencia.setBigDecimal(1, detalleFactura.getCidmovim01());
                 sentencia.setBigDecimal(2, detalleFactura.getCiddocum01());
@@ -102,6 +103,10 @@ public class DetalleFacturaDAO {
                 System.out.println("[DetalleFacturaDAO] No se pudo guardar la direccion");
             }
         } catch (Exception e) {
+            if (conexion != null) {
+                conexion.rollback();
+                System.out.println("[DetalleFacturaDAO] Haciendo rollback");
+            }
             System.out.println("[DetalleFacturaDAO] Ocurrio un error al guardar la direccion");
             e.printStackTrace();
         } finally {
@@ -272,7 +277,7 @@ public class DetalleFacturaDAO {
     private boolean abrirConexion() {
         boolean done = false;
         System.out.println("[DetalleFacturaDAO] Se abrira conexion a la base de datos");
-        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq");
+        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq7");
         conexion = contpaqConnection.getConnection();
         if (conexion != null) {
             done = true;

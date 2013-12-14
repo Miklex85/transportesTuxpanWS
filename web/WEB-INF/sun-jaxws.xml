@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <endpoints version="2.0" xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime">
   <endpoint implementation="com.tux.ws.ContpaqWS" name="ContpaqWS" url-pattern="/ContpaqWS"/>
-  <endpoint implementation="com.tux.ws.FacturaWS" name="FacturaWS" url-pattern="/FacturaWS"/>
-  <endpoint implementation="com.tux.ws.ClienteWS" name="ClienteWS" url-pattern="/ClienteWS"/>
-  <endpoint implementation="com.tux.ws.ProductoServicioWS" name="ProductoServicioWS" url-pattern="/ProductoServicioWS"/>
+  <endpoint implementation="com.tux.ws.pago.PagoFacturaWS" name="PagoFacturaWS" url-pattern="/PagoFacturaWS"/>
+  <endpoint implementation="com.tux.ws.producto.ProductoServicioWS" name="ProductoServicioWS" url-pattern="/ProductoServicioWS"/>
+  <endpoint implementation="com.tux.ws.factura.FacturaWS" name="FacturaWS" url-pattern="/FacturaWS"/>
+  <endpoint implementation="com.tux.ws.cliente.ClienteWS" name="ClienteWS" url-pattern="/ClienteWS"/>
 </endpoints>

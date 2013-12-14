@@ -31,6 +31,7 @@ public class ProductoDAO {
         boolean done = false;
         try {
             if (abrirConexion()) {
+                conexion.setAutoCommit(false);
                 sentencia = conexion.prepareStatement(construirSQL(1, null, null));
                 sentencia.setBigDecimal(1, producto.getCidprodu01());
                 sentencia.setString(2, producto.getCcodigop01());
@@ -151,6 +152,7 @@ public class ProductoDAO {
         } catch (Exception e) {
             if (conexion != null) {
                 conexion.rollback();
+                System.out.println("[ProductoDAO] Haciendo rollback");
             }
             System.out.println("[ProductoDAO] Ocurrio un error al guardar el producto/servicio");
             e.printStackTrace();
@@ -356,7 +358,7 @@ public class ProductoDAO {
     private boolean abrirConexion() {
         boolean done = false;
         System.out.println("[ProductoDAO] Se abrira conexion a la base de datos");
-        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq");
+        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq7");
         conexion = contpaqConnection.getConnection();
         if (conexion != null) {
             done = true;

@@ -29,6 +29,7 @@ public class FacturaDAO {
         boolean done = false;
         try {
             if (abrirConexion()) {
+                conexion.setAutoCommit(done);
                 sentencia = conexion.prepareStatement(construirSQL(1, null, null));
                 sentencia.setBigDecimal(1, factura.getCiddocum01());
                 sentencia.setBigDecimal(2, factura.getCiddocum02());
@@ -115,6 +116,10 @@ public class FacturaDAO {
                 System.out.println("[FacturaDAO] No se pudo guardar la factura");
             }
         } catch (Exception e) {
+            if (conexion != null) {
+                conexion.rollback();
+                System.out.println("[FacturaDAO] Haciendo rollback");
+            }
             System.out.println("[FacturaDAO] Ocurrio un error al guardar la factura");
             e.printStackTrace();
         } finally {
@@ -260,15 +265,15 @@ public class FacturaDAO {
                     //clase = columnas[i][1];
                     field.setAccessible(true);
                     clase = field.getType().getCanonicalName();
-                    System.out.println("ClienteDAO.construirCliente: Obteniendo y seteando propiedad --> " + field.getName());
+                    System.out.println("FacturaDAO.construirFactura: Obteniendo y seteando propiedad --> " + field.getName());
                     if (clase.equals("java.math.BigDecimal")) {
-                        field.set(factura, rs.getBigDecimal(field.getName()));
+                        field.set(fact, rs.getBigDecimal(field.getName()));
                     } else if (clase.equals("java.lang.String")) {
-                        field.set(factura, rs.getString(factura.get(field.getName())));
+                        field.set(fact, rs.getString(factura.get(field.getName())));
                     } else if (clase.equals("java.lang.Double")) {
-                        field.set(factura, rs.getDouble(factura.get(field.getName())));
+                        field.set(fact, rs.getDouble(factura.get(field.getName())));
                     } else if (clase.equals("java.sql.Date")) {
-                        field.set(factura, rs.getDate(factura.get(field.getName())));
+                        field.set(fact, rs.getDate(factura.get(field.getName())));
                     }
                 }
             }
@@ -349,7 +354,7 @@ public class FacturaDAO {
     private boolean abrirConexion() {
         boolean done = false;
         System.out.println("[FacturaDAO] Se abrira conexion a la base de datos");
-        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq");
+        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq7");
         conexion = contpaqConnection.getConnection();
         if (conexion != null) {
             done = true;

@@ -27,6 +27,7 @@ public class ContpaqConfigDAO {
         boolean done = false;
         try {
             if (abrirConexion()) {
+                conexion.setAutoCommit(false);
                 sentencia = conexion.prepareStatement(construirSQL(2, campo, valor, id));
                 sentencia.execute();
                 conexion.commit();
@@ -35,6 +36,10 @@ public class ContpaqConfigDAO {
                 System.out.println("[ContpaqConfigDAO] No se pudo actualizar el cliente");
             }
         } catch (Exception e) {
+            if (conexion != null) {
+                conexion.rollback();
+                System.out.println("[ContpaqConfigDAO] Haciendo rollback");
+            }
             System.out.println("[ContpaqConfigDAO] Ocurrio un error al actualizar el cliente");
             e.printStackTrace();
         } finally {
@@ -171,7 +176,7 @@ public class ContpaqConfigDAO {
     private boolean abrirConexion() {
         boolean done = false;
         System.out.println("[ContpaqConfigDAO] Se abrira conexion a la base de datos");
-        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq");
+        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq7");
         conexion = contpaqConnection.getConnection();
         if (conexion != null) {
             done = true;

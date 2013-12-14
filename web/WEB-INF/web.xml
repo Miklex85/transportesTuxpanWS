@@ -9,17 +9,22 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
+        <servlet-name>PagoFacturaWS</servlet-name>
+        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>ProductoServicioWS</servlet-name>
+        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
         <servlet-name>FacturaWS</servlet-name>
         <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
         <servlet-name>ClienteWS</servlet-name>
-        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet>
-        <servlet-name>ProductoServicioWS</servlet-name>
         <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -28,16 +33,20 @@
         <url-pattern>/ContpaqWS</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>PagoFacturaWS</servlet-name>
+        <url-pattern>/PagoFacturaWS</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductoServicioWS</servlet-name>
+        <url-pattern>/ProductoServicioWS</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>FacturaWS</servlet-name>
         <url-pattern>/FacturaWS</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ClienteWS</servlet-name>
         <url-pattern>/ClienteWS</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ProductoServicioWS</servlet-name>
-        <url-pattern>/ProductoServicioWS</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

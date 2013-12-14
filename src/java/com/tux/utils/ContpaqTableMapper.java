@@ -45,7 +45,7 @@ public class ContpaqTableMapper {
         Enumeration<Object> e = props.keys();
         while (e.hasMoreElements()) {
             String s = (String) e.nextElement();
-            System.out.println("[ContpaqTableMapper] Mapeando propiedad: " + s + " --> " + props.getProperty(s));
+            //System.out.println("[ContpaqTableMapper] Mapeando propiedad: " + s + " --> " + props.getProperty(s));
             setCampos(props.getProperty(s));
             hm.put(s, props.getProperty(s));
         }

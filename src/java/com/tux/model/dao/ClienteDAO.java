@@ -1,6 +1,7 @@
 package com.tux.model.dao;
 
 import com.tux.dto.ContpaqCliente;
+import com.tux.dto.ContpaqDireccion;
 import com.tux.utils.ContpaqTableMapper;
 import com.tux.utils.db.ContpaqConnection;
 import java.lang.reflect.Field;
@@ -23,12 +24,14 @@ public class ClienteDAO {
     private PreparedStatement sentencia;
     private ResultSet resultado;
     private Map<String, String> cliente;
+    private Map<String, String> direccion;
 
-    public boolean crearCliente(ContpaqCliente cliente) {
+    public boolean crearCliente(ContpaqCliente cliente, ContpaqDireccion direccion) {
         boolean done = false;
         try {
             if (abrirConexion()) {
                 int i = 1;
+                conexion.setAutoCommit(false);
                 sentencia = conexion.prepareStatement(construirSQL(1, null, null));
                 sentencia.setBigDecimal(1, cliente.getCidclien01());
                 sentencia.setString(2, cliente.getCcodigoc01());
@@ -146,10 +149,33 @@ public class ClienteDAO {
                 //sentencia.setBigDecimal(114, cliente.getCfmtoentre());
                 sentencia.setBigDecimal(71, cliente.getCidcomplem());
                 sentencia.setBigDecimal(72, cliente.getCdesglosai());
-                System.out.println(i);
                 //sentencia.setBigDecimal(117, cliente.getClimdoctos());
                 //sentencia.setString(118, cliente.getCsitioftp());
                 //sentencia.setString(119, cliente.getCusrftp());
+                sentencia.execute();
+                sentencia = conexion.prepareStatement(construirSQL(5, null, null));
+                sentencia.setBigDecimal(1, direccion.getCiddirec01());
+                sentencia.setBigDecimal(2, direccion.getCidcatal01());
+                sentencia.setBigDecimal(3, direccion.getCtipocat01());
+                sentencia.setBigDecimal(4, direccion.getCtipodir01());
+                sentencia.setString(5, direccion.getCnombrec01());
+                sentencia.setString(6, direccion.getCnumeroe01());
+                //sentencia.setString(7, direccion.getCnumeroi01());
+                sentencia.setString(7, direccion.getCcolonia());
+                sentencia.setString(8, direccion.getCcodigop01());
+                //sentencia.setString(10, direccion.getCtelefono1());
+                //sentencia.setString(11, direccion.getCtelefono2());
+                //sentencia.setString(12, direccion.getCtelefono3());
+                //sentencia.setString(13, direccion.getCtelefono4());
+                //sentencia.setString(14, direccion.getCemail());
+                //sentencia.setString(15, direccion.getCdirecci01());
+                sentencia.setString(9, direccion.getCpais());
+                sentencia.setString(10, direccion.getCestado());
+                sentencia.setString(11, direccion.getCciudad());
+                //sentencia.setString(19, direccion.getCtextoex01());
+                sentencia.setString(12, direccion.getCtimestamp());
+                sentencia.setString(13, direccion.getCmunicipio());
+                //sentencia.setString(22, direccion.getCsucursal());
                 sentencia.execute();
                 conexion.commit();
                 done = true;
@@ -157,6 +183,10 @@ public class ClienteDAO {
                 System.out.println("[ClienteDAO] No se pudo guardar el cliente");
             }
         } catch (Exception e) {
+            if (conexion != null) {
+                conexion.rollback();
+                System.out.println("[ClienteDAO] Haciendo rollback");
+            }
             System.out.println("[ClienteDAO] Ocurrio un error al guardar el cliente");
             e.printStackTrace();
         } finally {
@@ -293,6 +323,7 @@ public class ClienteDAO {
         String sql = "";
         ContpaqTableMapper tableMapper = new ContpaqTableMapper();
         cliente = tableMapper.mapDbfTable("cliente");
+        direccion = tableMapper.mapDbfTable("direcciones");
         switch (opcion) {
             case 1:
                 sql = "INSERT INTO " + cliente.get("archivoDbf") + "(CIDCLIEN01,CCODIGOC01,CRAZONSO01,CFECHAALTA,CRFC,CCURP,CDENCOME01,CREPLEGAL,CIDMONEDA,CLISTAPR01,CDESCUEN01,"
@@ -315,6 +346,11 @@ public class ClienteDAO {
             case 4:
                 sql = "SELECT * FROM " + cliente.get("archivoDbf");
                 break;
+            case 5:
+                sql = "INSERT INTO " + direccion.get("archivoDbf") + "(CIDDIREC01,CIDCATAL01,CTIPOCAT01,CTIPODIR01,CNOMBREC01,CNUMEROE01,CCOLONIA,CCODIGOP01,"
+                        + "CPAIS,CESTADO,CCIUDAD,CTIMESTAMP,CMUNICIPIO)"
+                        + " values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                break;
             default:
                 System.out.println("");
         }
@@ -325,7 +361,7 @@ public class ClienteDAO {
     private boolean abrirConexion() {
         boolean done = false;
         System.out.println("[ClienteDAO] Se abrira conexion a la base de datos");
-        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq");
+        ContpaqConnection contpaqConnection = new ContpaqConnection("Contpaq7");
         conexion = contpaqConnection.getConnection();
         if (conexion != null) {
             done = true;

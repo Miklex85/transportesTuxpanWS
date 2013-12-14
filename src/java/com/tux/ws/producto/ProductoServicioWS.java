@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tux.ws;
+package com.tux.ws.producto;
 
 import com.tux.model.ProductoBO;
 import com.tux.model.entity.DetalleFactura;
