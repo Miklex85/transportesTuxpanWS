@@ -177,8 +177,8 @@ public class ClienteBO {
     
     private ContpaqDireccion getDireccionCliente(DireccionCliente dir, BigDecimal idCliente) {
         ContpaqDireccion direccion = new ContpaqDireccion();
-        DireccionDAO direccionDAO = new DireccionDAO();
-        direccion.setCiddirec01(BigDecimal.valueOf(direccionDAO.getMaxId().intValue() + 1));
+        DireccionDAO direccionDAO = new DireccionDAO();  
+        direccion.setCiddirec01((direccionDAO.getMaxId() != null) ? (BigDecimal.valueOf(direccionDAO.getMaxId().intValue() + 1)) : BigDecimal.valueOf(1));
         direccion.setCidcatal01(idCliente);
         direccion.setCtipocat01(BigDecimal.valueOf(1));
         direccion.setCtipodir01(BigDecimal.valueOf(0));

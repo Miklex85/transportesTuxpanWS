@@ -78,7 +78,7 @@ public class FacturaBO {
             contpaqFactura.setCgasto2(Double.valueOf(0));
             contpaqFactura.setCgasto3(Double.valueOf(0));
             contpaqFactura.setCtotal(contpaqFactura.getCneto() + contpaqFactura.getCimpuesto1());
-            contpaqFactura.setCpendiente((tipo == 0) ? Double.valueOf(0) : contpaqFactura.getCtotal());
+            contpaqFactura.setCpendiente(contpaqFactura.getCtotal());//(tipo == 0) ? Double.valueOf(0) : contpaqFactura.getCtotal());
             contpaqFactura.setCtotalun01(contarProductos(listaProductos));
             contpaqFactura.setCdescuen04(Double.valueOf(0));
             contpaqFactura.setCporcent01(Double.valueOf(0));
@@ -114,8 +114,8 @@ public class FacturaBO {
             contpaqFactura.setCescfd(BigDecimal.valueOf(0));
             contpaqFactura.setCtienecfd(BigDecimal.valueOf(0));//
             facturaDAO = new FacturaDAO();
-            contpaqFactura.setCfolio(facturaDAO.getSiguienteFactura() + 1);
-            contpaqFactura.setCiddocum01(BigDecimal.valueOf(facturaDAO.getMaxId().intValue() + 1));
+            contpaqFactura.setCfolio((facturaDAO.getSiguienteFactura() != null) ? (facturaDAO.getSiguienteFactura() + 1) : (Double.valueOf(1)));
+            contpaqFactura.setCiddocum01((facturaDAO.getMaxId() != null) ? (BigDecimal.valueOf(facturaDAO.getMaxId().intValue() + 1)) : (BigDecimal.valueOf(1)));
             System.out.println("FacturaBO.crearFactura: Se va a guardar el registro de la factura ... ");
             if (facturaDAO.crearFactura(contpaqFactura)) {
                 detalleFactura = getDetalleFactura(contpaqFactura.getCiddocum01(), idCliente, listaProductos);
@@ -135,21 +135,36 @@ public class FacturaBO {
                     ContpaqConfigDAO contpaq = new ContpaqConfigDAO();
                     actualizado = contpaq.actualizarConfiguracion("CNOFOLIO", "" + contpaqFactura.getCfolio(), 4);
                     if (actualizado) {
-                        respuesta.add("100");
-                        respuesta.add("" + contpaqFactura.getCfolio());
-                        respuesta.add("La factura se ha creado correctamente.");
+                        if (tipo != 0) {
+                            respuesta.add("100");
+                            respuesta.add("" + contpaqFactura.getCfolio());
+                            respuesta.add("La factura se ha creado correctamente.");
+                        } else {
+                            List<String> resp;
+                            PagoFacturaBO pagoFacturaBO = new PagoFacturaBO();
+                            resp = pagoFacturaBO.registrarPagoFactura(contpaqFactura.getCfolio().longValue(), contpaqFactura.getCtotal());
+                            if (resp != null && resp.get(0).equals("601")) {
+                                respuesta.add("100");
+                                respuesta.add("" + contpaqFactura.getCfolio());
+                                respuesta.add("La factura se ha creado correctamente.");
+                            } else {
+                                respuesta.add("102");
+                                respuesta.add("" + contpaqFactura.getCfolio());
+                                respuesta.add("La factura se ha creado correctamente. Pero no pudo registrarse el pago de contado");
+                            }
+                        }
                     }
                 } else {
-                    respuesta.add("504");
+                    respuesta.add("104");
                     respuesta.add("Ocurrio un error al guardar los detalles de la factura.");
                 }
             } else {
-                respuesta.add("503");
+                respuesta.add("103");
                 respuesta.add("Ocurrio una error al guardar la factura.");
             }
         } catch (Exception e) {
             System.out.println("FacturaBO.crearFactura: Regresa la siguiente respuesta: " + respuesta);
-            respuesta.add("506");
+            respuesta.add("106");
             respuesta.add("Error fatal: La factura no pudo guardarse.");
             e.printStackTrace();
         } finally {
@@ -163,11 +178,12 @@ public class FacturaBO {
         DetalleFactura producto;
         DetalleFacturaDAO detalleFacturaDAO;
         int x = 0;
+        detalleFacturaDAO = new DetalleFacturaDAO();
+        int lastId = ((detalleFacturaDAO.getMaxId() != null) ? (detalleFacturaDAO.getMaxId().intValue()) : (1));
         while (x < listaProductos.size()) {
             producto = listaProductos.get(x);
             detalle = new ContpaqDetalleFactura();
-            detalleFacturaDAO = new DetalleFacturaDAO();
-            detalle.setCidmovim01(BigDecimal.valueOf(detalleFacturaDAO.getMaxId().intValue() + 1));//id
+            detalle.setCidmovim01(BigDecimal.valueOf(lastId + (x + 1)));//id
             detalle.setCiddocum01(factura);//id de factura
             detalle.setCnumerom01(Double.valueOf(100 * (x + 1)));
             detalle.setCiddocum02(BigDecimal.valueOf(4));

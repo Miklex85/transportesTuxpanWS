@@ -249,6 +249,27 @@ public class FacturaDAO {
         }
     }
 
+    public Double getSiguientePago() {
+        Double numeroFactura = null;
+        try {
+            if (abrirConexion()) {
+                sentencia = conexion.prepareStatement(construirSQL(7, null, null));
+                resultado = sentencia.executeQuery();
+                if (resultado.next()) {
+                    numeroFactura = resultado.getDouble(1);
+                }
+            } else {
+                System.out.println("[FacturaDAO] No se pudo obtener el siguiente numero de factura");
+            }
+        } catch (Exception e) {
+            System.out.println("[FacturaDAO] Ocurrio un error al obtener el siguiente numero de factura");
+            e.printStackTrace();
+        } finally {
+            cerrarConexion();
+            return numeroFactura;
+        }
+    }
+
     private ContpaqFactura construirFactura(ResultSet rs) {
         ContpaqFactura fact = null;
         String clase;
@@ -278,6 +299,7 @@ public class FacturaDAO {
                 }
             }
         } catch (Exception e) {
+            System.out.println("FacturaDAO.construirFactura: Ocurrio un error al construir la factura");
             e.printStackTrace();
         }
         return fact;
@@ -339,10 +361,14 @@ public class FacturaDAO {
                 sql = "SELECT * FROM " + factura.get("archivoDbf");
                 break;
             case 5:
-                sql = "SELECT MAX(CFOLIO) FROM " + factura.get("archivoDbf");
+                sql = "SELECT MAX(CFOLIO) FROM " + factura.get("archivoDbf") + " WHERE CIDDOCUM02 = 4";
                 break;
             case 6:
                 sql = "SELECT MAX(CIDDOCUM01) FROM " + factura.get("archivoDbf");
+                
+                break;
+            case 7:
+                sql = "SELECT MAX(CFOLIO) FROM " + factura.get("archivoDbf") + " WHERE CIDDOCUM02 = 9";
                 break;
             default:
                 System.out.println("");

@@ -36,7 +36,7 @@ public class PagoFacturaBO {
             facturaDAO = new FacturaDAO();
             factura = facturaDAO.consultarFactura("CFOLIO", "" + numeroFactura);
             restante = (factura.getCpendiente() - Double.valueOf(importePago));
-            if (restante > 0) {
+            if (restante >= 0) {
                 contpaqFactura = new ContpaqFactura();
                 contpaqFactura.setCiddocum02(BigDecimal.valueOf(9));
                 contpaqFactura.setCidconce01(BigDecimal.valueOf(10));
@@ -114,8 +114,8 @@ public class PagoFacturaBO {
                 contpaqFactura.setCtipocamca(Double.valueOf(0));
                 contpaqFactura.setCescfd(BigDecimal.valueOf(0));
                 contpaqFactura.setCtienecfd(BigDecimal.valueOf(0));//
-                contpaqFactura.setCfolio(facturaDAO.getSiguienteFactura() + 1);//Checar
-                contpaqFactura.setCiddocum01(BigDecimal.valueOf(facturaDAO.getMaxId().intValue() + 1));
+                contpaqFactura.setCfolio((facturaDAO.getSiguientePago() != null) ? (facturaDAO.getSiguientePago() + 1) : (Double.valueOf(1)));
+                contpaqFactura.setCiddocum01((facturaDAO.getMaxId() != null) ? (BigDecimal.valueOf(facturaDAO.getMaxId().intValue() + 1)) : (BigDecimal.valueOf(1)));
                 detalle = getDetalleFactura(contpaqFactura.getCiddocum01(), importePago);
                 pago = getPagoFactura(contpaqFactura.getCiddocum01(), factura.getCiddocum01(), importePago);
                 pagoFacturaDAO = new PagoFacturaDAO();
@@ -137,11 +137,12 @@ public class PagoFacturaBO {
                 respuesta.add("El cliente ya no tiene saldo pendiente sobre la factura indicada");
             }
         } catch (Exception e) {
-            System.out.println("PagoFacturaBO.registrarPagoFactura: Regresa la siguiente respuesta: " + respuesta);
+            System.out.println("PagoFacturaBO.registrarPagoFactura:  Ocurrio un error al registrar el pago de la factura ");
             respuesta.add("605");
             respuesta.add("Error fatal: La factura no pudo guardarse.");
             e.printStackTrace();
         } finally {
+            System.out.println("PagoFacturaBO.registrarPagoFactura: Regresa la siguiente respuesta: " + respuesta);
             return respuesta;
         }
     }
@@ -151,7 +152,8 @@ public class PagoFacturaBO {
         DetalleFacturaDAO detalleFacturaDAO;
         detalle = new ContpaqDetalleFactura();
         detalleFacturaDAO = new DetalleFacturaDAO();
-        detalle.setCidmovim01(BigDecimal.valueOf(detalleFacturaDAO.getMaxId().intValue() + 1));//id
+        int lastId = ((detalleFacturaDAO.getMaxId() != null) ? (detalleFacturaDAO.getMaxId().intValue()) : (1));
+        detalle.setCidmovim01(BigDecimal.valueOf(lastId));//id
         detalle.setCiddocum01(factura);//id de factura
         detalle.setCnumerom01(Double.valueOf(1));
         detalle.setCiddocum02(BigDecimal.valueOf(9));

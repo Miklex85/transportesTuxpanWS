@@ -26,19 +26,19 @@ public class ClienteWS {
     public boolean registrarCliente(@WebParam(name = "cliente") Cliente cliente, DireccionCliente direccion) {
         boolean respuesta = false;
         try {
-            System.out.println("******************************* Entrando a ClienteWS.consultarCliente ***************************************");
-            System.out.println("ClienteWS.consultarCliente --> Se reciben los siguientes parametros:");
-            System.out.println("ClienteWS.consultarCliente --> idCliente: " + cliente);
-             System.out.println("ClienteWS.consultarCliente --> idCliente: " + direccion);
+            System.out.println("******************************* Entrando a ClienteWS.registrarCliente ***************************************");
+            System.out.println("ClienteWS.registrarCliente --> Se reciben los siguientes parametros:");
+            System.out.println("ClienteWS.registrarCliente --> cliente: " + cliente);
+             System.out.println("ClienteWS.registrarCliente --> direccion: " + direccion);
             if (cliente != null) {
                 ClienteBO clienteBO = new ClienteBO();
                 respuesta = clienteBO.crearCliente(cliente, direccion);
             }
         } catch (Exception e) {
-            System.out.println("ClienteWS.consultarCliente: Error al consultar el cliente");
+            System.out.println("ClienteWS.registrarCliente: Error al consultar el cliente");
             e.printStackTrace();
         } finally {
-            System.out.println("ClienteWS.consultarCliente: Regresa la siguiente respuesta: " + respuesta);
+            System.out.println("ClienteWS.registrarCliente: Regresa la siguiente respuesta: " + respuesta);
             return respuesta;
         }
     }
