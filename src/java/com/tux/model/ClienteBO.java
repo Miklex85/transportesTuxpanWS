@@ -21,8 +21,8 @@ import java.text.SimpleDateFormat;
  * @author Mike
  */
 public class ClienteBO {
-    
-    public Cliente consultarCliente(long idCliente) {
+
+    public ContpaqCliente consultarCliente(long idCliente) {
         Cliente cliente = null;
         ContpaqCliente contpaqCliente = null;
         ClienteDAO clienteDAO = null;
@@ -32,16 +32,17 @@ public class ClienteBO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return cliente;
+            return contpaqCliente;
         }
     }
-    
+
     public boolean crearCliente(Cliente cliente, DireccionCliente direccion) {
         boolean respuesta = false;
         ContpaqCliente contpaqCliente = null;
         ClienteDAO clienteDAO = null;
         try {
             if (consultarCliente(cliente.getIdCliente()) == null) {
+                System.out.println("ClienteBO.crearCliente: El cliente (id de cliente) indicado no esta registrado");
                 contpaqCliente = new ContpaqCliente();
                 contpaqCliente.setCidclien01(BigDecimal.valueOf(cliente.getIdCliente()));
                 contpaqCliente.setCcodigoc01(cliente.getCodigoCliente());
@@ -163,8 +164,10 @@ public class ClienteBO {
                 contpaqCliente.setCsitioftp(null);
                 contpaqCliente.setCusrftp(null);
                 clienteDAO = new ClienteDAO();
-                respuesta = clienteDAO.crearCliente(contpaqCliente, getDireccionCliente(direccion,contpaqCliente.getCidclien01()));
                 System.out.println("ClienteBO.crearCliente: Se va a insertar el registro del cliente");
+                respuesta = clienteDAO.crearCliente(contpaqCliente, getDireccionCliente(direccion, contpaqCliente.getCidclien01()));
+            } else {
+                System.out.println("ClienteBO.crearCliente: El cliente (id de cliente) indicado ya esta registrado");
             }
         } catch (Exception e) {
             System.out.println("ClienteBO.crearCliente: Ocurrio un error al guardar al cliente");
@@ -174,11 +177,11 @@ public class ClienteBO {
             return respuesta;
         }
     }
-    
+
     private ContpaqDireccion getDireccionCliente(DireccionCliente dir, BigDecimal idCliente) {
         ContpaqDireccion direccion = new ContpaqDireccion();
-        DireccionDAO direccionDAO = new DireccionDAO();  
-        direccion.setCiddirec01((direccionDAO.getMaxId() != null) ? (BigDecimal.valueOf(direccionDAO.getMaxId().intValue() + 1)) : BigDecimal.valueOf(1));
+        DireccionDAO direccionDAO = new DireccionDAO();
+        direccion.setCiddirec01(direccionDAO.getMaxId());
         direccion.setCidcatal01(idCliente);
         direccion.setCtipocat01(BigDecimal.valueOf(1));
         direccion.setCtipodir01(BigDecimal.valueOf(0));
@@ -203,5 +206,51 @@ public class ClienteBO {
         direccion.setCmunicipio(dir.getMunicipio());
         direccion.setCsucursal("");//
         return direccion;
+    }
+
+    public boolean actualizarCliente(Cliente cliente, DireccionCliente dir) {
+        boolean respuesta = false;
+        ContpaqCliente contpaqCliente = null;
+        ClienteDAO clienteDAO = null;
+        try {
+            if (consultarCliente(cliente.getIdCliente()) != null) {
+                contpaqCliente = new ContpaqCliente();
+                contpaqCliente.setCidclien01(BigDecimal.valueOf(cliente.getIdCliente()));
+                contpaqCliente.setCcodigoc01(cliente.getCodigoCliente());
+                contpaqCliente.setCrazonso01(cliente.getRazonSocial());
+                contpaqCliente.setCrfc(cliente.getRfc());
+                contpaqCliente.setCcurp(cliente.getCurp());
+                contpaqCliente.setCdencome01(cliente.getDenominacionComercial());
+                contpaqCliente.setCreplegal(cliente.getRepresentanteLegal());
+                contpaqCliente.setClimitec01(Double.valueOf(cliente.getLimiteDeCredito()));
+                contpaqCliente.setCdiascre01(BigDecimal.valueOf(cliente.getDiasDeCredito()));
+                contpaqCliente.setCemail1(cliente.getEmail());
+                ContpaqDireccion direccion = new ContpaqDireccion();
+                direccion.setCidcatal01(BigDecimal.valueOf(cliente.getIdCliente()));
+                direccion.setCtipocat01(BigDecimal.valueOf(1));
+                direccion.setCtipodir01(BigDecimal.valueOf(0));
+                direccion.setCnombrec01(dir.getCalle());
+                direccion.setCnumeroe01(dir.getNumeroExterior());
+                direccion.setCcolonia(dir.getColonia());
+                direccion.setCcodigop01(dir.getCodigoPostal());
+                direccion.setCestado(dir.getEstado());
+                direccion.setCciudad(dir.getMunicipio());
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS");
+                String textDate = df.format(FechaUtils.getFechaActual());
+                direccion.setCtimestamp(textDate);
+                direccion.setCmunicipio(dir.getMunicipio());
+                clienteDAO = new ClienteDAO();
+                respuesta = clienteDAO.actualizarCliente(contpaqCliente, direccion);
+                System.out.println("ClienteBO.actualizarCliente: Se va a actualizar el registro del cliente");
+            } else {
+                System.out.println("ClienteBO.actualizarCliente: El cliente indicado no esta registrado");
+            }
+        } catch (Exception e) {
+            System.out.println("ClienteBO.actualizarCliente: Ocurrio un error al actualizar los datos del cliente");
+            e.printStackTrace();
+        } finally {
+            System.out.println("ClienteBO.actualizarCliente: Se regresa como respuesta --> " + respuesta);
+            return respuesta;
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.tux.dto.ContpaqDetalleFactura;
 import com.tux.dto.ContpaqFactura;
 import com.tux.utils.db.ContpaqConnection;
 import com.tux.utils.ContpaqTableMapper;
+import com.tux.utils.db.FirebirdConnection;
 import java.util.Map;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +25,7 @@ public class FacturaDAO {
     private PreparedStatement sentencia;
     private ResultSet resultado;
     private Map<String, String> factura;
+    private Map<String, String> folioDigital;
 
     public boolean crearFactura(ContpaqFactura factura) {
         boolean done = false;
@@ -108,7 +110,7 @@ public class FacturaDAO {
                 sentencia.setBigDecimal(65, factura.getCidmonedca());
                 sentencia.setDouble(66, factura.getCtipocamca());
                 sentencia.setBigDecimal(67, factura.getCescfd());
-                sentencia.setBigDecimal(68, factura.getCtienecfd());
+                //sentencia.setBigDecimal(68, factura.getCtienecfd());
                 sentencia.execute();
                 conexion.commit();
                 done = true;
@@ -210,8 +212,8 @@ public class FacturaDAO {
     public BigDecimal getMaxId() {
         BigDecimal numeroFactura = null;
         try {
-            if (abrirConexion()) {
-                sentencia = conexion.prepareStatement(construirSQL(6, null, null));
+            if (abrirConexionFirebird()) {
+                sentencia = conexion.prepareStatement(construirSQL(5, "seq_documento_id", null));
                 resultado = sentencia.executeQuery();
                 if (resultado.next()) {
                     numeroFactura = resultado.getBigDecimal(1);
@@ -228,11 +230,15 @@ public class FacturaDAO {
         }
     }
 
-    public Double getSiguienteFactura() {
+    public Double getSiguienteFactura(int tipo) {
         Double numeroFactura = null;
         try {
-            if (abrirConexion()) {
-                sentencia = conexion.prepareStatement(construirSQL(5, null, null));
+            if (abrirConexionFirebird()) {
+                if (tipo != 0) {
+                    sentencia = conexion.prepareStatement(construirSQL(5, "seq_folio_factura_credito", null));
+                } else {
+                    sentencia = conexion.prepareStatement(construirSQL(5, "seq_folio_factura_contado", null));
+                }
                 resultado = sentencia.executeQuery();
                 if (resultado.next()) {
                     numeroFactura = resultado.getDouble(1);
@@ -252,8 +258,8 @@ public class FacturaDAO {
     public Double getSiguientePago() {
         Double numeroFactura = null;
         try {
-            if (abrirConexion()) {
-                sentencia = conexion.prepareStatement(construirSQL(7, null, null));
+            if (abrirConexionFirebird()) {
+                sentencia = conexion.prepareStatement(construirSQL(5, "seq_folio_pago", null));
                 resultado = sentencia.executeQuery();
                 if (resultado.next()) {
                     numeroFactura = resultado.getDouble(1);
@@ -275,7 +281,7 @@ public class FacturaDAO {
         String clase;
         //String[][] columnas;
         try {
-            //getColumnNames(rs);
+            getColumnNames(rs);
             if (rs.next()) {
                 fact = new ContpaqFactura();
                 Field[] attributes = fact.getClass().getDeclaredFields();
@@ -286,7 +292,7 @@ public class FacturaDAO {
                     //clase = columnas[i][1];
                     field.setAccessible(true);
                     clase = field.getType().getCanonicalName();
-                    System.out.println("FacturaDAO.construirFactura: Obteniendo y seteando propiedad --> " + field.getName());
+                    //System.out.println("FacturaDAO.construirFactura: Obteniendo y seteando propiedad --> " + field.getName());
                     if (clase.equals("java.math.BigDecimal")) {
                         field.set(fact, rs.getBigDecimal(field.getName()));
                     } else if (clase.equals("java.lang.String")) {
@@ -339,6 +345,7 @@ public class FacturaDAO {
         String sql = "";
         ContpaqTableMapper tableMapper = new ContpaqTableMapper();
         factura = tableMapper.mapDbfTable("factura");
+        folioDigital = tableMapper.mapDbfTable("folioDigital");
         switch (opcion) {
             case 1:
                 sql = "INSERT INTO " + factura.get("archivoDbf") + "(CIDDOCUM01,CIDDOCUM02,CIDCONCE01,CFOLIO,CFECHA,"
@@ -348,8 +355,8 @@ public class FacturaDAO {
                         + "CDESCUEN02,CDESCUEN03,CGASTO1,CGASTO2,CGASTO3,CTOTAL,CPENDIENTE,CTOTALUN01,CDESCUEN04,CPORCENT01,CPORCENT02,CPORCENT03,"
                         + "CPORCENT04,CPORCENT05,CPORCENT06,CIMPORTE01,CIMPORTE02,CIMPORTE03,CIMPORTE04,"
                         + "CDESTINA01,CNUMEROG01,CMENSAJE01,CCUENTAM01,CNUMEROC01,CPESO,CBANOBSE01,CBANDATO01,CBANCOND01,CBANGASTOS,CUNIDADE01,"
-                        + "CIMPCHEQ01,CSISTORIG,CIDMONEDCA,CTIPOCAMCA,CESCFD,CTIENECFD)"
-                        + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        + "CIMPCHEQ01,CSISTORIG,CIDMONEDCA,CTIPOCAMCA,CESCFD)"
+                        + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 break;
             case 2:
                 sql = "UPDATE " + factura.get("archivoDbf") + " SET " + campo + " = " + valor;
@@ -361,14 +368,7 @@ public class FacturaDAO {
                 sql = "SELECT * FROM " + factura.get("archivoDbf");
                 break;
             case 5:
-                sql = "SELECT MAX(CFOLIO) FROM " + factura.get("archivoDbf") + " WHERE CIDDOCUM02 = 4";
-                break;
-            case 6:
-                sql = "SELECT MAX(CIDDOCUM01) FROM " + factura.get("archivoDbf");
-                
-                break;
-            case 7:
-                sql = "SELECT MAX(CFOLIO) FROM " + factura.get("archivoDbf") + " WHERE CIDDOCUM02 = 9";
+                sql = "SELECT NEXT VALUE FOR " + campo + " FROM RDB$DATABASE";
                 break;
             default:
                 System.out.println("");
@@ -404,6 +404,19 @@ public class FacturaDAO {
         } catch (Exception e) {
             System.out.println("[FacturaDAO] Ocurrio un error al cerrar la conexion a la base de datos");
             e.printStackTrace();
+        }
+        return done;
+    }
+
+    private boolean abrirConexionFirebird() {
+        boolean done = false;
+        System.out.println("[FacturaDAO] Se abrira conexion a la base de datos");
+        FirebirdConnection firebirdConnection = new FirebirdConnection();
+        conexion = firebirdConnection.getConnection();
+        if (conexion != null) {
+            done = true;
+        } else {
+            System.out.println("[FacturaDAO] No se pudo obtener la conexion a la base de datos");
         }
         return done;
     }

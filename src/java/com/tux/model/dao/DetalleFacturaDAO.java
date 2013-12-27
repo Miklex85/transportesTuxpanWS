@@ -3,6 +3,7 @@ package com.tux.model.dao;
 import com.tux.dto.ContpaqDetalleFactura;
 import com.tux.utils.ContpaqTableMapper;
 import com.tux.utils.db.ContpaqConnection;
+import com.tux.utils.db.FirebirdConnection;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -171,7 +172,7 @@ public class DetalleFacturaDAO {
                     //clase = columnas[i][1];
                     field.setAccessible(true);
                     clase = field.getType().getCanonicalName();
-                    System.out.println("DetalleFacturaDAO.construirCliente: Obteniendo y seteando propiedad --> " + field.getName());
+                    //System.out.println("DetalleFacturaDAO.construirCliente: Obteniendo y seteando propiedad --> " + field.getName());
                     if (clase.equals("java.math.BigDecimal")) {
                         field.set(detallesFactura, rs.getBigDecimal(field.getName()));
                     } else if (clase.equals("java.lang.String")) {
@@ -192,8 +193,8 @@ public class DetalleFacturaDAO {
     public BigDecimal getMaxId() {
         BigDecimal numeroFactura = null;
         try {
-            if (abrirConexion()) {
-                sentencia = conexion.prepareStatement(construirSQL(5, null, null));
+            if (abrirConexionFirebird()) {
+                sentencia = conexion.prepareStatement(construirSQL(5, "seq_detalle_factura_id", null));
                 resultado = sentencia.executeQuery();
                 if (resultado.next()) {
                     numeroFactura = resultado.getBigDecimal(1);
@@ -265,7 +266,7 @@ public class DetalleFacturaDAO {
                 sql = "SELECT * FROM " + detallesFactura.get("archivoDbf");
                 break;
             case 5:
-                sql = "SELECT MAX(CIDMOVIM01) FROM " + detallesFactura.get("archivoDbf");
+                sql = "SELECT NEXT VALUE FOR " + campo + " FROM RDB$DATABASE";
                 break;
             default:
                 System.out.println("");
@@ -301,6 +302,19 @@ public class DetalleFacturaDAO {
         } catch (Exception e) {
             System.out.println("[DetalleFacturaDAO] Ocurrio un error al cerrar la conexion a la base de datos");
             e.printStackTrace();
+        }
+        return done;
+    }
+
+    private boolean abrirConexionFirebird() {
+        boolean done = false;
+        System.out.println("[DetalleFacturaDAO] Se abrira conexion a la base de datos");
+        FirebirdConnection firebirdConnection = new FirebirdConnection();
+        conexion = firebirdConnection.getConnection();
+        if (conexion != null) {
+            done = true;
+        } else {
+            System.out.println("[DetalleFacturaDAO] No se pudo obtener la conexion a la base de datos");
         }
         return done;
     }

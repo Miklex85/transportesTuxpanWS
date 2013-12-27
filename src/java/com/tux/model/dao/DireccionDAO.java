@@ -3,6 +3,7 @@ package com.tux.model.dao;
 import com.tux.dto.ContpaqDireccion;
 import com.tux.utils.ContpaqTableMapper;
 import com.tux.utils.db.ContpaqConnection;
+import com.tux.utils.db.FirebirdConnection;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -113,17 +114,17 @@ public class DireccionDAO {
     public BigDecimal getMaxId() {
         BigDecimal numeroFactura = null;
         try {
-            if (abrirConexion()) {
-                sentencia = conexion.prepareStatement(construirSQL(5, null, null));
+            if (abrirConexionFirebird()) {
+                sentencia = conexion.prepareStatement(construirSQL(5, "seq_direcciones_id", null));
                 resultado = sentencia.executeQuery();
                 if (resultado.next()) {
                     numeroFactura = resultado.getBigDecimal(1);
                 }
             } else {
-                System.out.println("[FacturaDAO] No se pudo obtener el siguiente ID");
+                System.out.println("[DireccionDAO] No se pudo obtener el siguiente ID");
             }
         } catch (Exception e) {
-            System.out.println("[FacturaDAO] Ocurrio un error al obtener el siguiente ID");
+            System.out.println("[DireccionDAO] Ocurrio un error al obtener el siguiente ID");
             e.printStackTrace();
         } finally {
             cerrarConexion();
@@ -222,7 +223,7 @@ public class DireccionDAO {
                 sql = "SELECT * FROM " + direccion.get("archivoDbf");
                 break;
             case 5:
-                sql = "SELECT MAX(CIDDIREC01) FROM " + direccion.get("archivoDbf");
+                sql = "SELECT NEXT VALUE FOR " + campo + " FROM RDB$DATABASE";
                 break;
             default:
                 System.out.println("");
@@ -258,6 +259,19 @@ public class DireccionDAO {
         } catch (Exception e) {
             System.out.println("[DireccionDAO] Ocurrio un error al cerrar la conexion a la base de datos");
             e.printStackTrace();
+        }
+        return done;
+    }
+
+    private boolean abrirConexionFirebird() {
+        boolean done = false;
+        System.out.println("[DireccionDAO] Se abrira conexion a la base de datos");
+        FirebirdConnection firebirdConnection = new FirebirdConnection();
+        conexion = firebirdConnection.getConnection();
+        if (conexion != null) {
+            done = true;
+        } else {
+            System.out.println("[DireccionDAO] No se pudo obtener la conexion a la base de datos");
         }
         return done;
     }

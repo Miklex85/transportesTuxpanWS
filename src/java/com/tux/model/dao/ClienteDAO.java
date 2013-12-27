@@ -195,11 +195,36 @@ public class ClienteDAO {
         }
     }
 
-    public boolean actualizarCliente(String campo, String valor) {
+    public boolean actualizarCliente(ContpaqCliente cliente, ContpaqDireccion direccion) {
         boolean done = false;
         try {
             if (abrirConexion()) {
-                sentencia = conexion.prepareStatement(construirSQL(2, campo, valor));
+                sentencia = conexion.prepareStatement("UPDATE MGW10002 SET CCODIGOC01 = ?, CRAZONSO01 = ?, CRFC = ?, CCURP = ?, CDENCOME01 = ?,"
+                        + " CREPLEGAL = ?, CLIMITEC01 = ?, CDIASCRE01 = ?, CEMAIL1 = ? WHERE CIDCLIEN01 = ?");
+                sentencia.setString(1, cliente.getCcodigoc01());
+                sentencia.setString(2, cliente.getCrazonso01());
+                sentencia.setString(3, cliente.getCrfc());
+                sentencia.setString(4, cliente.getCcurp());
+                sentencia.setString(5, cliente.getCdencome01());
+                sentencia.setString(6, cliente.getCreplegal());
+                sentencia.setDouble(7, cliente.getClimitec01());
+                sentencia.setBigDecimal(8, cliente.getCdiascre01());
+                sentencia.setString(9, cliente.getCemail1());
+                sentencia.setBigDecimal(10, cliente.getCidclien01());
+                sentencia.execute();
+                sentencia = conexion.prepareStatement("UPDATE MGW10011 SET CNOMBREC01 = ?, CNUMEROE01 = ?, CCOLONIA = ?, CCODIGOP01 = ?, "
+                        + "CESTADO = ?, CCIUDAD = ?, CTIMESTAMP = ? , CMUNICIPIO = ? WHERE CIDCATAL01 = ? AND CTIPOCAT01 = ? AND CTIPODIR01 = ?");
+                sentencia.setString(1, direccion.getCnombrec01());
+                sentencia.setString(2, direccion.getCnumeroe01());
+                sentencia.setString(3, direccion.getCcolonia());
+                sentencia.setString(4, direccion.getCcodigop01());
+                sentencia.setString(5, direccion.getCestado());
+                sentencia.setString(6, direccion.getCciudad());
+                sentencia.setString(7, direccion.getCtimestamp());
+                sentencia.setString(8, direccion.getCmunicipio());
+                sentencia.setBigDecimal(9, direccion.getCidcatal01());
+                sentencia.setBigDecimal(10, direccion.getCtipocat01());
+                sentencia.setBigDecimal(11, direccion.getCtipodir01());
                 sentencia.execute();
                 conexion.commit();
                 done = true;
@@ -259,7 +284,7 @@ public class ClienteDAO {
         String clase;
         //String[][] columnas;
         try {
-            getColumnNames(rs);
+            //getColumnNames(rs);
             if (rs.next()) {
                 client = new ContpaqCliente();
                 Field[] attributes = client.getClass().getDeclaredFields();
@@ -270,7 +295,7 @@ public class ClienteDAO {
                     //clase = columnas[i][1];
                     field.setAccessible(true);
                     clase = field.getType().getCanonicalName();
-                    System.out.println("ClienteDAO.construirCliente: Obteniendo y seteando propiedad --> " + field.getName());
+                    //System.out.println("ClienteDAO.construirCliente: Obteniendo y seteando propiedad --> " + field.getName());
                     if (clase.equals("java.math.BigDecimal")) {
                         field.set(client, rs.getBigDecimal(field.getName()));
                     } else if (clase.equals("java.lang.String")) {

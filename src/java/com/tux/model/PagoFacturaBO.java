@@ -114,8 +114,8 @@ public class PagoFacturaBO {
                 contpaqFactura.setCtipocamca(Double.valueOf(0));
                 contpaqFactura.setCescfd(BigDecimal.valueOf(0));
                 contpaqFactura.setCtienecfd(BigDecimal.valueOf(0));//
-                contpaqFactura.setCfolio((facturaDAO.getSiguientePago() != null) ? (facturaDAO.getSiguientePago() + 1) : (Double.valueOf(1)));
-                contpaqFactura.setCiddocum01((facturaDAO.getMaxId() != null) ? (BigDecimal.valueOf(facturaDAO.getMaxId().intValue() + 1)) : (BigDecimal.valueOf(1)));
+                contpaqFactura.setCfolio(facturaDAO.getSiguientePago());
+                contpaqFactura.setCiddocum01(facturaDAO.getMaxId());
                 detalle = getDetalleFactura(contpaqFactura.getCiddocum01(), importePago);
                 pago = getPagoFactura(contpaqFactura.getCiddocum01(), factura.getCiddocum01(), importePago);
                 pagoFacturaDAO = new PagoFacturaDAO();
@@ -152,7 +152,7 @@ public class PagoFacturaBO {
         DetalleFacturaDAO detalleFacturaDAO;
         detalle = new ContpaqDetalleFactura();
         detalleFacturaDAO = new DetalleFacturaDAO();
-        int lastId = ((detalleFacturaDAO.getMaxId() != null) ? (detalleFacturaDAO.getMaxId().intValue()) : (1));
+        int lastId = detalleFacturaDAO.getMaxId().intValue();
         detalle.setCidmovim01(BigDecimal.valueOf(lastId));//id
         detalle.setCiddocum01(factura);//id de factura
         detalle.setCnumerom01(Double.valueOf(1));

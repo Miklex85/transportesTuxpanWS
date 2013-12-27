@@ -276,7 +276,7 @@ public class ProductoDAO {
                     //clase = columnas[i][1];
                     field.setAccessible(true);
                     clase = field.getType().getCanonicalName();
-                    System.out.println("ProductoDAO.construirCliente: Obteniendo y seteando propiedad --> " + field.getName());
+                    //System.out.println("ProductoDAO.construirProducto: Obteniendo y seteando propiedad --> " + field.getName());
                     if (clase.equals("java.math.BigDecimal")) {
                         field.set(prod, rs.getBigDecimal(field.getName()));
                     } else if (clase.equals("java.lang.String")) {

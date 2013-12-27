@@ -25,7 +25,7 @@ public class ContpaqTableMapper {
 
     public ContpaqTableMapper() {
         ambiente = new Environment(false);
-        ambiente.getSystemProperties();
+        //ambiente.getSystemProperties();
         campos = "";
     }
 

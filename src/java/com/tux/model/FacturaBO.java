@@ -21,6 +21,8 @@ import java.util.List;
  */
 public class FacturaBO {
 
+    private Double otrasLineas = Double.valueOf(0);
+
     public List<String> crearFactura(List<String> datosFactura, int tipo, long idCliente, List<DetalleFactura> listaProductos) {//List<String> listaProductos) {
         List<String> respuesta = null;
         ContpaqFactura contpaqFactura = null;
@@ -32,135 +34,159 @@ public class FacturaBO {
         ClienteDAO clienteDAO = null;
         boolean hecho = false;
         boolean actualizado = false;
+        Double retenciones = Double.valueOf(datosFactura.get(14));
         try {
             clienteDAO = new ClienteDAO();
             respuesta = new ArrayList<String>();
             contpaqCliente = clienteDAO.consultarCliente("CIDCLIEN01", "" + idCliente);
-            contpaqFactura = new ContpaqFactura();
-            contpaqFactura.setCiddocum02(BigDecimal.valueOf(4));
-            contpaqFactura.setCidconce01((tipo == 0) ? (BigDecimal.valueOf(5)) : (BigDecimal.valueOf(4)));
-            contpaqFactura.setCseriedo01(null);//
-            contpaqFactura.setCfecha(FechaUtils.getFechaActual());
-            contpaqFactura.setCidclien01(BigDecimal.valueOf(idCliente));
-            contpaqFactura.setCrazonso01(contpaqCliente.getCrazonso01());
-            contpaqFactura.setCrfc(contpaqCliente.getCrfc());
-            contpaqFactura.setCidagente(BigDecimal.valueOf(0));
-            contpaqFactura.setCfechave01(FechaUtils.getFechaLimite(contpaqCliente.getCdiascre01()));
-            contpaqFactura.setCfechapr01(FechaUtils.getFechaActual());
-            contpaqFactura.setCfechaen01(FechaUtils.getFechaActual());
-            contpaqFactura.setCfechaul01(FechaUtils.getFechaLimite(contpaqCliente.getCdiascre01()));
-            contpaqFactura.setCidmoneda(BigDecimal.valueOf(1));
-            contpaqFactura.setCtipocam01(Double.valueOf(1));
-            contpaqFactura.setCreferen01(datosFactura.get(0));
-            contpaqFactura.setCobserva01(datosFactura.get(1));
-            contpaqFactura.setCnatural01(BigDecimal.valueOf(0));
-            contpaqFactura.setCiddocum03(BigDecimal.valueOf(0));//
-            contpaqFactura.setCplantilla(BigDecimal.valueOf(0));//
-            contpaqFactura.setCusaclie01(BigDecimal.valueOf(1));
-            contpaqFactura.setCusaprov01(BigDecimal.valueOf(0));
-            contpaqFactura.setCafectado(BigDecimal.valueOf(1));
-            contpaqFactura.setCimpreso(BigDecimal.valueOf(0));
-            contpaqFactura.setCcancelado(BigDecimal.valueOf(0));
-            contpaqFactura.setCdevuelto(BigDecimal.valueOf(0));
-            contpaqFactura.setCidprepo01(null);//
-            contpaqFactura.setCidprepo02(null);//
-            contpaqFactura.setCestadoc01(BigDecimal.valueOf(1));
-            contpaqFactura.setCneto(calcularImporteNeto(listaProductos));
-            contpaqFactura.setCimpuesto1(calcularImpuestos(listaProductos));
-            contpaqFactura.setCimpuesto2(Double.valueOf(0));
-            contpaqFactura.setCimpuesto3(Double.valueOf(0));
-            contpaqFactura.setCretenci01(Double.valueOf(0));
-            contpaqFactura.setCretenci02(Double.valueOf(0));
-            contpaqFactura.setCdescuen01(Double.valueOf(0));
-            contpaqFactura.setCdescuen02(Double.valueOf(0));
-            contpaqFactura.setCdescuen03(Double.valueOf(0));
-            contpaqFactura.setCgasto1(Double.valueOf(0));
-            contpaqFactura.setCgasto2(Double.valueOf(0));
-            contpaqFactura.setCgasto3(Double.valueOf(0));
-            contpaqFactura.setCtotal(contpaqFactura.getCneto() + contpaqFactura.getCimpuesto1());
-            contpaqFactura.setCpendiente(contpaqFactura.getCtotal());//(tipo == 0) ? Double.valueOf(0) : contpaqFactura.getCtotal());
-            contpaqFactura.setCtotalun01(contarProductos(listaProductos));
-            contpaqFactura.setCdescuen04(Double.valueOf(0));
-            contpaqFactura.setCporcent01(Double.valueOf(0));
-            contpaqFactura.setCporcent02(Double.valueOf(0));
-            contpaqFactura.setCporcent03(Double.valueOf(0));
-            contpaqFactura.setCporcent04(Double.valueOf(0));
-            contpaqFactura.setCporcent05(Double.valueOf(0));
-            contpaqFactura.setCporcent06(Double.valueOf(0));
-            contpaqFactura.setCtextoex01(null);//
-            contpaqFactura.setCtextoex02(null);//
-            contpaqFactura.setCtextoex03(null);//
-            contpaqFactura.setCfechaex01((tipo == 0) ? FechaUtils.getFechaActual() : null);//fecha pago contado
-            contpaqFactura.setCimporte01(Double.valueOf(0));
-            contpaqFactura.setCimporte02(Double.valueOf(0));
-            contpaqFactura.setCimporte03(Double.valueOf(0));
-            contpaqFactura.setCimporte04(Double.valueOf(0));
-            contpaqFactura.setCdestina01(datosFactura.get(2));
-            contpaqFactura.setCnumerog01(datosFactura.get(3));
-            contpaqFactura.setCmensaje01(datosFactura.get(4));
-            contpaqFactura.setCcuentam01(datosFactura.get(7));
-            contpaqFactura.setCnumeroc01(Double.valueOf(datosFactura.get(5)));
-            contpaqFactura.setCpeso(Double.valueOf(datosFactura.get(8)));
-            contpaqFactura.setCbanobse01((tipo == 0) ? (BigDecimal.valueOf(1)) : (BigDecimal.valueOf(0)));//
-            contpaqFactura.setCbandato01((tipo == 0) ? (BigDecimal.valueOf(1)) : (BigDecimal.valueOf(0)));//
-            contpaqFactura.setCbancond01((tipo == 0) ? (BigDecimal.valueOf(1)) : (BigDecimal.valueOf(0)));//
-            contpaqFactura.setCbangastos(BigDecimal.valueOf(0));//
-            contpaqFactura.setCunidade01(contpaqFactura.getCtotalun01());
-            contpaqFactura.setCtimestamp(null);//
-            contpaqFactura.setCimpcheq01(contpaqFactura.getCtotal());
-            contpaqFactura.setCsistorig(BigDecimal.valueOf(0));//
-            contpaqFactura.setCidmonedca(BigDecimal.valueOf(0));//
-            contpaqFactura.setCtipocamca(Double.valueOf(0));
-            contpaqFactura.setCescfd(BigDecimal.valueOf(0));
-            contpaqFactura.setCtienecfd(BigDecimal.valueOf(0));//
-            facturaDAO = new FacturaDAO();
-            contpaqFactura.setCfolio((facturaDAO.getSiguienteFactura() != null) ? (facturaDAO.getSiguienteFactura() + 1) : (Double.valueOf(1)));
-            contpaqFactura.setCiddocum01((facturaDAO.getMaxId() != null) ? (BigDecimal.valueOf(facturaDAO.getMaxId().intValue() + 1)) : (BigDecimal.valueOf(1)));
-            System.out.println("FacturaBO.crearFactura: Se va a guardar el registro de la factura ... ");
-            if (facturaDAO.crearFactura(contpaqFactura)) {
-                detalleFactura = getDetalleFactura(contpaqFactura.getCiddocum01(), idCliente, listaProductos);
-                int y = 0;
-                detalleFacturaDAO = new DetalleFacturaDAO();
-                while (y < detalleFactura.size()) {
-                    System.out.println("FacturaBO.crearFactura: Se va a guardar el producto " + (y + 1));
-                    detalle = detalleFactura.get(y);
-                    hecho = detalleFacturaDAO.crearDetalleFactura(detalle);
-                    if (hecho) {
-                        y++;
-                    } else {
-                        y = detalleFactura.size();
-                    }
-                }
-                if (hecho) {
-                    ContpaqConfigDAO contpaq = new ContpaqConfigDAO();
-                    actualizado = contpaq.actualizarConfiguracion("CNOFOLIO", "" + contpaqFactura.getCfolio(), 4);
-                    if (actualizado) {
-                        if (tipo != 0) {
-                            respuesta.add("100");
-                            respuesta.add("" + contpaqFactura.getCfolio());
-                            respuesta.add("La factura se ha creado correctamente.");
+            if (contpaqCliente != null) {
+                contpaqFactura = new ContpaqFactura();
+                contpaqFactura.setCiddocum02(BigDecimal.valueOf(4));
+                contpaqFactura.setCidconce01((tipo == 0) ? (BigDecimal.valueOf(5)) : (BigDecimal.valueOf(4)));
+                contpaqFactura.setCseriedo01(null);//
+                contpaqFactura.setCfecha(FechaUtils.getFechaActual());
+                contpaqFactura.setCidclien01(BigDecimal.valueOf(idCliente));
+                contpaqFactura.setCrazonso01(contpaqCliente.getCrazonso01());
+                contpaqFactura.setCrfc(contpaqCliente.getCrfc());
+                contpaqFactura.setCidagente(BigDecimal.valueOf(0));
+                contpaqFactura.setCfechave01(FechaUtils.getFechaLimite(contpaqCliente.getCdiascre01()));
+                contpaqFactura.setCfechapr01(FechaUtils.getFechaActual());
+                contpaqFactura.setCfechaen01(FechaUtils.getFechaActual());
+                contpaqFactura.setCfechaul01(FechaUtils.getFechaLimite(contpaqCliente.getCdiascre01()));
+                contpaqFactura.setCidmoneda(BigDecimal.valueOf(1));
+                contpaqFactura.setCtipocam01(Double.valueOf(1));
+                contpaqFactura.setCreferen01(datosFactura.get(0));
+                contpaqFactura.setCobserva01(datosFactura.get(1));
+                contpaqFactura.setCnatural01(BigDecimal.valueOf(0));
+                contpaqFactura.setCiddocum03(BigDecimal.valueOf(0));//
+                contpaqFactura.setCplantilla(BigDecimal.valueOf(0));//
+                contpaqFactura.setCusaclie01(BigDecimal.valueOf(1));
+                contpaqFactura.setCusaprov01(BigDecimal.valueOf(0));
+                contpaqFactura.setCafectado(BigDecimal.valueOf(1));
+                contpaqFactura.setCimpreso(BigDecimal.valueOf(0));
+                contpaqFactura.setCcancelado(BigDecimal.valueOf(0));
+                contpaqFactura.setCdevuelto(BigDecimal.valueOf(0));
+                contpaqFactura.setCidprepo01(null);//
+                contpaqFactura.setCidprepo02(null);//
+                contpaqFactura.setCestadoc01(BigDecimal.valueOf(1));
+                contpaqFactura.setCneto(calcularImporteNeto(listaProductos));
+                contpaqFactura.setCimpuesto1(calcularImpuestos(listaProductos));
+                contpaqFactura.setCimpuesto2(Double.valueOf(0));
+                contpaqFactura.setCimpuesto3(Double.valueOf(0));
+                contpaqFactura.setCretenci01(Double.valueOf(0));//(retenciones));
+                contpaqFactura.setCretenci02(Double.valueOf(0));
+                contpaqFactura.setCdescuen01(Double.valueOf(0));
+                contpaqFactura.setCdescuen02(Double.valueOf(0));
+                contpaqFactura.setCdescuen03(Double.valueOf(0));
+                contpaqFactura.setCgasto1(Double.valueOf(0));
+                contpaqFactura.setCgasto2(Double.valueOf(0));
+                contpaqFactura.setCgasto3(Double.valueOf(0));
+                contpaqFactura.setCtotal(((contpaqFactura.getCneto() + contpaqFactura.getCimpuesto1())));// - retenciones));
+                contpaqFactura.setCpendiente(contpaqFactura.getCtotal());//(tipo == 0) ? Double.valueOf(0) : contpaqFactura.getCtotal());
+                contpaqFactura.setCtotalun01(contarProductos(listaProductos));
+                contpaqFactura.setCdescuen04(Double.valueOf(0));
+                contpaqFactura.setCporcent01(Double.valueOf(0));
+                contpaqFactura.setCporcent02(Double.valueOf(0));
+                contpaqFactura.setCporcent03(Double.valueOf(0));
+                contpaqFactura.setCporcent04(Double.valueOf(0.04));
+                contpaqFactura.setCporcent05(Double.valueOf(0));
+                contpaqFactura.setCporcent06(Double.valueOf(0));
+                contpaqFactura.setCtextoex01(null);//
+                contpaqFactura.setCtextoex02(null);//
+                contpaqFactura.setCtextoex03(null);//
+                contpaqFactura.setCfechaex01((tipo == 0) ? FechaUtils.getFechaActual() : null);//fecha pago contado
+                contpaqFactura.setCimporte01(Double.valueOf(0));
+                contpaqFactura.setCimporte02(Double.valueOf(0));
+                contpaqFactura.setCimporte03(Double.valueOf(0));
+                contpaqFactura.setCimporte04(Double.valueOf(0));
+                contpaqFactura.setCdestina01(datosFactura.get(2));
+                contpaqFactura.setCnumerog01(datosFactura.get(3));
+                contpaqFactura.setCmensaje01(datosFactura.get(4));
+                contpaqFactura.setCcuentam01(datosFactura.get(7));
+                contpaqFactura.setCnumeroc01(Double.valueOf(datosFactura.get(5)));
+                contpaqFactura.setCpeso(Double.valueOf(datosFactura.get(8)));
+                contpaqFactura.setCbanobse01((tipo == 0) ? (BigDecimal.valueOf(1)) : (BigDecimal.valueOf(0)));//
+                contpaqFactura.setCbandato01((tipo == 0) ? (BigDecimal.valueOf(1)) : (BigDecimal.valueOf(0)));//
+                contpaqFactura.setCbancond01((tipo == 0) ? (BigDecimal.valueOf(1)) : (BigDecimal.valueOf(0)));//
+                contpaqFactura.setCbangastos(BigDecimal.valueOf(0));//
+                contpaqFactura.setCunidade01(contpaqFactura.getCtotalun01());
+                contpaqFactura.setCtimestamp(null);//
+                contpaqFactura.setCimpcheq01(contpaqFactura.getCtotal());
+                contpaqFactura.setCsistorig(BigDecimal.valueOf(0));//
+                contpaqFactura.setCidmonedca(BigDecimal.valueOf(0));//
+                contpaqFactura.setCtipocamca(Double.valueOf(0));
+                contpaqFactura.setCescfd((tipo == 0) ? (BigDecimal.valueOf(1)) : (BigDecimal.valueOf(0)));
+                contpaqFactura.setCtienecfd(BigDecimal.valueOf(0));//
+                facturaDAO = new FacturaDAO();
+                contpaqFactura.setCfolio(facturaDAO.getSiguienteFactura(tipo));
+                contpaqFactura.setCiddocum01(facturaDAO.getMaxId());
+                System.out.println("FacturaBO.crearFactura: Se va a guardar el registro de la factura ... ");
+                if (facturaDAO.crearFactura(contpaqFactura)) {
+                    detalleFactura = getDetalleFactura(contpaqFactura.getCiddocum01(), idCliente, listaProductos);
+                    int y = 0;
+                    detalleFacturaDAO = new DetalleFacturaDAO();
+                    while (y < detalleFactura.size()) {
+                        System.out.println("FacturaBO.crearFactura: Se va a guardar el producto " + (y + 1));
+                        detalle = detalleFactura.get(y);
+                        hecho = detalleFacturaDAO.crearDetalleFactura(detalle);
+                        if (hecho) {
+                            y++;
                         } else {
-                            List<String> resp;
-                            PagoFacturaBO pagoFacturaBO = new PagoFacturaBO();
-                            resp = pagoFacturaBO.registrarPagoFactura(contpaqFactura.getCfolio().longValue(), contpaqFactura.getCtotal());
-                            if (resp != null && resp.get(0).equals("601")) {
+                            y = detalleFactura.size();
+                        }
+                    }
+                    if (hecho) {
+                        ContpaqConfigDAO contpaq = new ContpaqConfigDAO();
+                        actualizado = contpaq.actualizarConfiguracion(tipo, "CNOFOLIO", "" + contpaqFactura.getCfolio(), ((tipo == 0) ? (5) : (4))); //tipo: 0 = contado ; 1 = credito ---- 4 = Factura Credito; 5 = Factura Contado
+                        if (actualizado) {
+                            if (tipo == 1) {
+                                //boolean cfdi = false;
+                                //FolioDigitalBO folioBO = new FolioDigitalBO();
+                                //cfdi = folioBO.registrarFolioDigital(contpaqFactura);
+                                //if (cfdi) {
                                 respuesta.add("100");
                                 respuesta.add("" + contpaqFactura.getCfolio());
                                 respuesta.add("La factura se ha creado correctamente.");
+                                //} else {
+                                //    respuesta.add("107");
+                                //    respuesta.add("" + contpaqFactura.getCfolio());
+                                //    respuesta.add("La factura se ha creado correctamente. Pero no pudo registrarse el folio digital");
+                                //}
                             } else {
-                                respuesta.add("102");
-                                respuesta.add("" + contpaqFactura.getCfolio());
-                                respuesta.add("La factura se ha creado correctamente. Pero no pudo registrarse el pago de contado");
+                                List<String> resp;
+                                boolean cfdi = false;
+                                PagoFacturaBO pagoFacturaBO = new PagoFacturaBO();
+                                resp = pagoFacturaBO.registrarPagoFactura(contpaqFactura.getCfolio().longValue(), contpaqFactura.getCtotal());
+                                if (resp != null && resp.get(0).equals("601")) {
+                                    FolioDigitalBO folioBO = new FolioDigitalBO();
+                                    cfdi = folioBO.registrarFolioDigital(contpaqFactura);
+                                    if (cfdi) {
+                                        respuesta.add("100");
+                                        respuesta.add("" + contpaqFactura.getCfolio());
+                                        respuesta.add("La factura se ha creado correctamente.");
+                                    } else {
+                                        respuesta.add("107");
+                                        respuesta.add("" + contpaqFactura.getCfolio());
+                                        respuesta.add("La factura se ha creado correctamente. Pero no pudo registrarse el folio digital");
+                                    }
+                                } else {
+                                    respuesta.add("102");
+                                    respuesta.add("" + contpaqFactura.getCfolio());
+                                    respuesta.add("La factura se ha creado correctamente. Pero no pudo registrarse el pago de contado");
+                                }
                             }
                         }
+                    } else {
+                        respuesta.add("104");
+                        respuesta.add("Ocurrio un error al guardar los detalles de la factura.");
                     }
                 } else {
-                    respuesta.add("104");
-                    respuesta.add("Ocurrio un error al guardar los detalles de la factura.");
+                    respuesta.add("103");
+                    respuesta.add("Ocurrio una error al guardar la factura.");
                 }
             } else {
-                respuesta.add("103");
-                respuesta.add("Ocurrio una error al guardar la factura.");
+                respuesta.add("108");
+                respuesta.add("El cliente porporcionado no esta registrado en Contpaq-i");
             }
         } catch (Exception e) {
             System.out.println("FacturaBO.crearFactura: Regresa la siguiente respuesta: " + respuesta);
@@ -179,9 +205,12 @@ public class FacturaBO {
         DetalleFacturaDAO detalleFacturaDAO;
         int x = 0;
         detalleFacturaDAO = new DetalleFacturaDAO();
-        int lastId = ((detalleFacturaDAO.getMaxId() != null) ? (detalleFacturaDAO.getMaxId().intValue()) : (1));
+        int lastId = detalleFacturaDAO.getMaxId().intValue();
         while (x < listaProductos.size()) {
             producto = listaProductos.get(x);
+            if (producto.getIdProducto() == 8) {
+                producto.setPrecio(producto.getPrecio() * (-1));
+            }
             detalle = new ContpaqDetalleFactura();
             detalle.setCidmovim01(BigDecimal.valueOf(lastId + (x + 1)));//id
             detalle.setCiddocum01(factura);//id de factura
@@ -290,10 +319,16 @@ public class FacturaBO {
     private Double calcularImporteNeto(List<DetalleFactura> listaProductos) {
         double neto = 0;
         int x = 0;
+        otrasLineas = Double.valueOf(0);
         while (x < listaProductos.size()) {
-            neto += (listaProductos.get(x)).getCantidad() * (listaProductos.get(x)).getPrecio();
+            //if (listaProductos.get(x).getIdProducto() != 2) {
+            neto += (listaProductos.get(x)).getCantidad() * ((listaProductos.get(x).getIdProducto() != 8) ? ((listaProductos.get(x)).getPrecio()) : ((listaProductos.get(x)).getPrecio() * (-1)));
+            //} else {
+            //  otrasLineas += (listaProductos.get(x)).getCantidad() * (listaProductos.get(x)).getPrecio();
+            //}
             x++;
         }
+        System.out.println("************************************************************ Neto: " + neto);
         return Double.valueOf(neto);
     }
 
@@ -301,9 +336,13 @@ public class FacturaBO {
         double impuestos = 0;
         int x = 0;
         while (x < listaProductos.size()) {
-            impuestos += (((listaProductos.get(x)).getCantidad() * (listaProductos.get(x)).getPrecio())) * (listaProductos.get(x)).getIva();
+            if (listaProductos.get(x).getIdProducto() != 2) {
+                System.out.println("cantidad :" + listaProductos.get(x).getCantidad() + ", precio: " + listaProductos.get(x).getPrecio() + ", iva: " + (listaProductos.get(x)).getIva());
+                impuestos += (((listaProductos.get(x)).getCantidad() * (listaProductos.get(x)).getPrecio())) * (listaProductos.get(x)).getIva();
+            }
             x++;
         }
+        System.out.println("*********************************************************** Impuestos: " + impuestos);
         return Double.valueOf(impuestos);
     }
 

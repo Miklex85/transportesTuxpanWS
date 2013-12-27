@@ -4,13 +4,11 @@ import com.tux.dto.ContpaqConfig;
 import com.tux.utils.ContpaqTableMapper;
 import com.tux.utils.db.ContpaqConnection;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Map;
-import org.apache.commons.beanutils.PropertyUtils;
 
 /**
  *
@@ -23,24 +21,29 @@ public class ContpaqConfigDAO {
     private ResultSet resultado;
     private Map<String, String> configuracion;
 
-    public boolean actualizarConfiguracion(String campo, String valor, long id) {
+    public boolean actualizarConfiguracion(int tipo, String campo, String valor, long id) {
         boolean done = false;
         try {
             if (abrirConexion()) {
                 conexion.setAutoCommit(false);
-                sentencia = conexion.prepareStatement(construirSQL(2, campo, valor, id));
+                if (tipo == 1) {
+                    System.out.println("[ContpaqConfigDAO] Aumenta el indice para las facturas a credito");
+                    sentencia = conexion.prepareStatement(construirSQL(2, campo, valor, id));
+                    sentencia.execute();
+                }
+                sentencia = conexion.prepareStatement(construirSQL(3, campo, valor, id));
                 sentencia.execute();
                 conexion.commit();
                 done = true;
             } else {
-                System.out.println("[ContpaqConfigDAO] No se pudo actualizar el cliente");
+                System.out.println("[ContpaqConfigDAO] No se pudo actualizar el valor de la última factura generada");
             }
         } catch (Exception e) {
             if (conexion != null) {
                 conexion.rollback();
                 System.out.println("[ContpaqConfigDAO] Haciendo rollback");
             }
-            System.out.println("[ContpaqConfigDAO] Ocurrio un error al actualizar el cliente");
+            System.out.println("[ContpaqConfigDAO] Ocurrio un error al actualizar el valor de la última factura generada");
             e.printStackTrace();
         } finally {
             cerrarConexion();
@@ -73,33 +76,24 @@ public class ContpaqConfigDAO {
         String clase;
         String[][] columnas;
         try {
-            getColumnNames(rs);
+            //getColumnNames(rs);
             if (rs.next()) {
                 client = new ContpaqConfig();
                 Field[] attributes = client.getClass().getDeclaredFields();
                 System.out.println("Detectados " + attributes.length + " atributos");
-                columnas = getColumnNames(attributes);
-                //for (Field field : attributes) {
-                for (int i = 0; i < columnas.length; i++) {
-                    clase = columnas[i][1];
-                    System.out.println("ATTRIBUTE NAME: " + columnas[i][0]);
+                //columnas = getColumnNames(attributes);
+                for (Field field : attributes) {
+                    field.setAccessible(true);
+                    clase = field.getType().getCanonicalName();
                     if (clase.equals("java.math.BigDecimal")) {
-                        System.out.println("-------------------BD---------------------");
-                        BigDecimal ejemplo = rs.getBigDecimal(columnas[i][0]);
-                        System.out.println("------- PROP: " + columnas[i][0] + " - CN: " + configuracion.get(columnas[i][0]) + " - VAL: " + ejemplo);//+ rs.getBigDecimal(factura.get(columnas[i][0])) + " ----------");
-                        PropertyUtils.setSimpleProperty(client, columnas[i][0], ejemplo);
-                        System.out.println("ATTRIBUTE NAME: " + columnas[i][0]);
+                        field.set(client, rs.getBigDecimal(field.getName()));
                     } else if (clase.equals("java.lang.String")) {
-                        System.out.println("-------------------Str---------------------");
-                        PropertyUtils.setSimpleProperty(client, columnas[i][0], rs.getString(configuracion.get(columnas[i][0])));
+                        field.set(client, rs.getString(configuracion.get(field.getName())));
                     } else if (clase.equals("java.lang.Double")) {
-                        System.out.println("-------------------Db---------------------");
-                        PropertyUtils.setSimpleProperty(client, columnas[i][0], rs.getDouble(configuracion.get(columnas[i][0])));
+                        field.set(client, rs.getDouble(configuracion.get(field.getName())));
                     } else if (clase.equals("java.sql.Date")) {
-                        System.out.println("-------------------Da---------------------");
-                        PropertyUtils.setSimpleProperty(client, columnas[i][0], rs.getDate(configuracion.get(columnas[i][0])));
+                        field.set(client, rs.getDate(configuracion.get(field.getName())));
                     }
-                    System.out.println("ATTRIBUTE VALUE: " + PropertyUtils.getSimpleProperty(client, columnas[i][0]));
                 }
             }
         } catch (Exception e) {
@@ -161,9 +155,12 @@ public class ContpaqConfigDAO {
                 sql = "UPDATE " + configuracion.get("archivoDbf") + " SET " + campo + " = " + valor + " WHERE " + configuracion.get("id") + " = " + id;
                 break;
             case 3:
-                sql = "SELECT * FROM " + configuracion.get("archivoDbf") + " WHERE " + campo + " = " + valor;
+                sql = "UPDATE MGW10006 SET " + campo + " = " + valor + " WHERE CIDCONCE01 = " + id;
                 break;
             case 4:
+                sql = "SELECT * FROM " + configuracion.get("archivoDbf") + " WHERE " + campo + " = " + valor;
+                break;
+            case 5:
                 sql = "SELECT * FROM " + configuracion.get("archivoDbf");
                 break;
             default:
