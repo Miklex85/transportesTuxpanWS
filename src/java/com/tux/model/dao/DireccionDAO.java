@@ -137,7 +137,7 @@ public class DireccionDAO {
         String clase;
         String[][] columnas;
         try {
-            getColumnNames(rs);
+            //getColumnNames(rs);
             if (rs.next()) {
                 dir = new ContpaqDireccion();
                 Field[] attributes = dir.getClass().getDeclaredFields();

@@ -281,7 +281,7 @@ public class FacturaDAO {
         String clase;
         //String[][] columnas;
         try {
-            getColumnNames(rs);
+            //getColumnNames(rs);
             if (rs.next()) {
                 fact = new ContpaqFactura();
                 Field[] attributes = fact.getClass().getDeclaredFields();

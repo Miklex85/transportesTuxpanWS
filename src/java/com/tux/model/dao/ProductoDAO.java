@@ -265,7 +265,7 @@ public class ProductoDAO {
         String clase;
         String[][] columnas;
         try {
-            getColumnNames(rs);
+            //getColumnNames(rs);
             if (rs.next()) {
                 prod = new ContpaqProducto();
                 Field[] attributes = prod.getClass().getDeclaredFields();

@@ -161,7 +161,7 @@ public class DetalleFacturaDAO {
         String clase;
         String[][] columnas;
         try {
-            getColumnNames(rs);
+            //getColumnNames(rs);
             if (rs.next()) {
                 det = new ContpaqDetalleFactura();
                 Field[] attributes = det.getClass().getDeclaredFields();
@@ -198,6 +198,7 @@ public class DetalleFacturaDAO {
                 resultado = sentencia.executeQuery();
                 if (resultado.next()) {
                     numeroFactura = resultado.getBigDecimal(1);
+                    System.out.println("[DetalleFacturaDAO] Obtenido el id : " + numeroFactura);
                 }
             } else {
                 System.out.println("[DetalleFacturaDAO] No se pudo obtener el siguiente ID");

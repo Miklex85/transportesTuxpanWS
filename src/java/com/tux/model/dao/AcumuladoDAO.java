@@ -291,7 +291,7 @@ public class AcumuladoDAO {
         String clase;
         //String[][] columnas;
         try {
-            getColumnNames(rs);
+            //getColumnNames(rs);
             if (rs.next()) {
                 fact = new ContpaqAcumulado();
                 Field[] attributes = fact.getClass().getDeclaredFields();

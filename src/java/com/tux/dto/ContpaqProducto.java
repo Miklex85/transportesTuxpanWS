@@ -110,8 +110,10 @@ public class ContpaqProducto implements Serializable{
     private java.lang.String csegcont05;
     private java.lang.String csegcont06;
     private java.lang.String csegcont07;
-    private java.math.BigDecimal cnomodcomp;
-
+    //private java.math.BigDecimal cnomodcomp;
+    private java.lang.String cctapred;
+    private java.math.BigDecimal cnodescomp;
+    
     /**
      * @return the cidprodu01
      */
@@ -1543,14 +1545,42 @@ public class ContpaqProducto implements Serializable{
     /**
      * @return the cnomodcomp
      */
-    public java.math.BigDecimal getCnomodcomp() {
-        return cnomodcomp;
-    }
+    //public java.math.BigDecimal getCnomodcomp() {
+    //    return cnomodcomp;
+    //}
 
     /**
      * @param cnomodcomp the cnomodcomp to set
      */
-    public void setCnomodcomp(java.math.BigDecimal cnomodcomp) {
-        this.cnomodcomp = cnomodcomp;
+    //public void setCnomodcomp(java.math.BigDecimal cnomodcomp) {
+    //    this.cnomodcomp = cnomodcomp;
+    //}
+
+    /**
+     * @return the cctapred
+     */
+    public java.lang.String getCctapred() {
+        return cctapred;
+    }
+
+    /**
+     * @param cctapred the cctapred to set
+     */
+    public void setCctapred(java.lang.String cctapred) {
+        this.cctapred = cctapred;
+    }
+
+    /**
+     * @return the cnodescomp
+     */
+    public java.math.BigDecimal getCnodescomp() {
+        return cnodescomp;
+    }
+
+    /**
+     * @param cnodescomp the cnodescomp to set
+     */
+    public void setCnodescomp(java.math.BigDecimal cnodescomp) {
+        this.cnodescomp = cnodescomp;
     }
 }

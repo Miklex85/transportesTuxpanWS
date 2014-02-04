@@ -141,7 +141,8 @@ public class ProductoBO {
                 contpaqProducto.setCsegcont05(null);
                 contpaqProducto.setCsegcont06(null);
                 contpaqProducto.setCsegcont07(null);
-                contpaqProducto.setCnomodcomp(null);
+                contpaqProducto.setCctapred(null);
+                contpaqProducto.setCnodescomp(null);
                 productoDAO = new ProductoDAO();
                 respuesta = productoDAO.crearProductoServicio(contpaqProducto);
                 System.out.println("ProductoBO.crearProducto: Se va a insertar el registro del producto");

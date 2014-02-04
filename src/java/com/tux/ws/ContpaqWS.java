@@ -49,7 +49,7 @@ public class ContpaqWS {
             //config.consultarConfiguracion("CIDDOCUM01", "4", 0);
             //factura.consultarFactura("CFOLIO", "4");
             //folio.consultarFolioDigital("CIDFOLDIG", "1");
-            producto.consultarProducto("CIDPRODU01", "3");
+            //producto.consultarProducto("CIDPRODU01", "3");
             //cli.setIdCliente(9);
             //cli.setCodigoCliente("9");
             //cli.setRfc("PRUE000000BAS");
@@ -67,7 +67,7 @@ public class ContpaqWS {
             //dir.setMunicipio("EL MUNICIPIO");
             //dir.setNumeroExterior("NUMEXT");
             //cliBO.crearCliente(cli,dir);
-            //cliente.consultarCliente("CIDCLIEN01", "1");
+            cliente.consultarCliente("CIDCLIEN01", "1");
             //direccion.consultarDireccion("CIDDIREC01", "5");
             //detalle.consultarDetalleFactura("CIDDOCUM01", "14");
             /*prod.setIdProducto(7);

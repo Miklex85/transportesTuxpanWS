@@ -22,6 +22,7 @@ import java.util.List;
 public class FacturaBO {
 
     private Double otrasLineas = Double.valueOf(0);
+    private Double retenciones = Double.valueOf(0);
 
     public List<String> crearFactura(List<String> datosFactura, int tipo, long idCliente, List<DetalleFactura> listaProductos) {//List<String> listaProductos) {
         List<String> respuesta = null;
@@ -34,7 +35,10 @@ public class FacturaBO {
         ClienteDAO clienteDAO = null;
         boolean hecho = false;
         boolean actualizado = false;
-        Double retenciones = Double.valueOf(datosFactura.get(14));
+        //Double retenciones = Double.valueOf(datosFactura.get(14));
+        if (datosFactura.size() > 14) {
+            retenciones = Double.valueOf(datosFactura.get(14));
+        }
         try {
             clienteDAO = new ClienteDAO();
             respuesta = new ArrayList<String>();
@@ -74,14 +78,14 @@ public class FacturaBO {
                 contpaqFactura.setCimpuesto2(Double.valueOf(0));
                 contpaqFactura.setCimpuesto3(Double.valueOf(0));
                 contpaqFactura.setCretenci01(Double.valueOf(0));//(retenciones));
-                contpaqFactura.setCretenci02(Double.valueOf(0));
+                contpaqFactura.setCretenci02(Double.valueOf(retenciones));
                 contpaqFactura.setCdescuen01(Double.valueOf(0));
                 contpaqFactura.setCdescuen02(Double.valueOf(0));
                 contpaqFactura.setCdescuen03(Double.valueOf(0));
                 contpaqFactura.setCgasto1(Double.valueOf(0));
                 contpaqFactura.setCgasto2(Double.valueOf(0));
                 contpaqFactura.setCgasto3(Double.valueOf(0));
-                contpaqFactura.setCtotal(((contpaqFactura.getCneto() + contpaqFactura.getCimpuesto1())));// - retenciones));
+                contpaqFactura.setCtotal(((contpaqFactura.getCneto() + contpaqFactura.getCimpuesto1()) - retenciones));
                 contpaqFactura.setCpendiente(contpaqFactura.getCtotal());//(tipo == 0) ? Double.valueOf(0) : contpaqFactura.getCtotal());
                 contpaqFactura.setCtotalun01(contarProductos(listaProductos));
                 contpaqFactura.setCdescuen04(Double.valueOf(0));
@@ -205,14 +209,16 @@ public class FacturaBO {
         DetalleFacturaDAO detalleFacturaDAO;
         int x = 0;
         detalleFacturaDAO = new DetalleFacturaDAO();
-        int lastId = detalleFacturaDAO.getMaxId().intValue();
+        //int lastId = detalleFacturaDAO.getMaxId().intValue();
+        Double retencion = Double.valueOf(0);
         while (x < listaProductos.size()) {
             producto = listaProductos.get(x);
-            if (producto.getIdProducto() == 8) {
-                producto.setPrecio(producto.getPrecio() * (-1));
+            if (producto.getIdProducto() == 7) {
+                //producto.setPrecio(producto.getPrecio() * (-1));
+                retencion = retenciones;
             }
             detalle = new ContpaqDetalleFactura();
-            detalle.setCidmovim01(BigDecimal.valueOf(lastId + (x + 1)));//id
+            detalle.setCidmovim01(BigDecimal.valueOf(detalleFacturaDAO.getMaxId().intValue()));//id
             detalle.setCiddocum01(factura);//id de factura
             detalle.setCnumerom01(Double.valueOf(100 * (x + 1)));
             detalle.setCiddocum02(BigDecimal.valueOf(4));
@@ -236,7 +242,7 @@ public class FacturaBO {
             detalle.setCporcent03(Double.valueOf(0));
             detalle.setCretenci01(Double.valueOf(0));
             detalle.setCporcent04(Double.valueOf(0));
-            detalle.setCretenci02(Double.valueOf(0));
+            detalle.setCretenci02(Double.valueOf(retencion));///retencion
             detalle.setCporcent05(Double.valueOf(0));
             detalle.setCdescuen01(Double.valueOf(0));
             detalle.setCporcent06(Double.valueOf(0));
@@ -248,7 +254,7 @@ public class FacturaBO {
             detalle.setCporcent09(Double.valueOf(0));
             detalle.setCdescuen05(Double.valueOf(0));
             detalle.setCporcent10(Double.valueOf(0));
-            detalle.setCtotal(detalle.getCneto() + detalle.getCimpuesto1());
+            detalle.setCtotal((detalle.getCneto() + detalle.getCimpuesto1()) - retencion);
             detalle.setCporcent11(Double.valueOf(0));
             detalle.setCreferen01(null);
             detalle.setCobserva01(null);

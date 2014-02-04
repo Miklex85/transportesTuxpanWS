@@ -160,7 +160,7 @@ public class FolioDigitalDAO {
         String clase;
         //String[][] columnas;
         try {
-            getColumnNames(rs);
+            //getColumnNames(rs);
             if (rs.next()) {
                 fact = new ContpaqFolioDigital();
                 Field[] attributes = fact.getClass().getDeclaredFields();
